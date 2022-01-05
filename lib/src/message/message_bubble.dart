@@ -11,64 +11,45 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Container(
-                width: flexWidth(message.text.length > message.author.length
-                    ? message.text.length
-                    : message.author.length)),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Container(
-                    padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
-                    // width: 60,
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      // color: author == fireState.myName
-                      //     ? MyColors.thisUserBubbleBackground
-                      //     : MyColors.otherUserBubbleBackground,
-                      borderRadius: BorderRadius.circular(13),
-                    ),
-                    child: Text(
-                      message.text,
-                      // style: TextStyle(
-                      //     color: author == fireState.myName
-                      //         ? MyColors.thisUserBubbleForeground
-                      //         : MyColors.otherUserBubbleForeground),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        message.author,
-                        // style: author == fireState.myName
-                        //     ? Styles.thisAuthorName
-                        //     : Styles.otherAuthorName
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+    return Container(
+      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+      width: flexWidth(message.text.length, message.author.length, context),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
+            decoration: BoxDecoration(
+              color: Colors.amber,
+              // color: author == fireState.myName
+              //     ? MyColors.thisUserBubbleBackground
+              //     : MyColors.otherUserBubbleBackground,
+              borderRadius: BorderRadius.circular(13),
             ),
-            Container(width: 20)
-          ],
-        ),
-        Container(height: 10),
-      ],
+            child: Text(
+              message.text + message.text.length.toString(),
+              // style: TextStyle(
+              //     color: author == fireState.myName
+              //         ? MyColors.thisUserBubbleForeground
+              //         : MyColors.otherUserBubbleForeground),
+            ),
+          ),
+          Text(
+            message.author,
+            textAlign: TextAlign.end,
+            // style: author == fireState.myName
+            //     ? Styles.thisAuthorName
+            //     : Styles.otherAuthorName
+          ),
+        ],
+      ),
     );
   }
 }
 
-double flexWidth(int textLength) {
-  if (textLength < 20) return 140;
-  if (textLength < 140) return (140.0 - 1 * textLength);
-  return 20;
+// Some preset bubble widths based on message (and maybe author) string lenghts
+double flexWidth(int textLength, int authorLength, BuildContext context) {
+  if (textLength > 100) return MediaQuery.of(context).size.width - 100;
+  if (textLength > 50) return 200;
+  return 150.0;
 }
