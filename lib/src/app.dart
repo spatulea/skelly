@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:skelly/src/message/thread_controller.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
-import 'sample_feature/thread_list_view.dart';
+import 'message/thread_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 
@@ -12,9 +13,11 @@ class MyApp extends StatelessWidget {
   const MyApp({
     Key? key,
     required this.settingsController,
+    required this.threadController,
   }) : super(key: key);
 
   final SettingsController settingsController;
+  final ThreadController threadController;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +76,9 @@ class MyApp extends StatelessWidget {
                     return const SampleItemDetailsView();
                   case ThreadListView.routeName:
                   default:
-                    return ThreadListView();
+                    return ThreadListView(
+                      threadController: threadController,
+                    );
                 }
               },
             );

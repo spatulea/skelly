@@ -3,9 +3,9 @@ import 'message.dart';
 import 'message_bubble.dart';
 
 class MessageThread extends StatelessWidget {
-  MessageThread({Key? key, required this.messageList}) : super(key: key);
+  MessageThread({Key? key, required this.thread}) : super(key: key);
 
-  final List<Message> messageList;
+  final Thread thread;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +23,18 @@ class MessageThread extends StatelessWidget {
     //   ),
     // );
     return SingleChildScrollView(
-        scrollDirection: Axis.horizontal, child: _buildThread(messageList));
+        scrollDirection: Axis.horizontal, child: _buildThread(thread));
   }
 }
 
 // Build all messages in a single thread
 // TODO performance will be an issue with large/long threads
-Widget _buildThread(List<Message> messageList) {
+Widget _buildThread(Thread thread) {
   List<Widget> bubbles = [];
 
-  if (messageList.isEmpty) return Container();
+  if (thread.messages.isEmpty) return Container();
 
-  for (var message in messageList) {
+  for (var message in thread.messages) {
     bubbles.add(MessageBubble(message: message));
   }
   return Row(

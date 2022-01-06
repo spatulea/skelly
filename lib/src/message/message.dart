@@ -1,6 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart'
     show Timestamp, FieldValue;
 
+class Thread {
+  Thread(this.messages, {required this.threadUid});
+  final List<Message> messages;
+  final String threadUid;
+}
+
 class Message {
   final String text;
   final String author;

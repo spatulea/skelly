@@ -1,47 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:skelly/src/message/thread_controller.dart';
 
 import '../settings/settings_view.dart';
-import 'sample_item.dart';
-import 'sample_item_details_view.dart';
-import '../message/message_bubble.dart';
-import '../message/message.dart';
-import '../message/message_thread.dart';
+import 'message.dart';
+import 'message_thread.dart';
 
-final List<Message> messageHorizontalList = [
-  Message(
-      text:
-          'some first message text that is very long and may need multiple lines and may cause issues with overflow if not controlled to take up less space than this will accomodate this is strange',
-      author: 'some first author',
-      userUid: 'some uUid',
-      timeStamp: Timestamp.now(),
-      isNew: true),
-  Message(
-      text:
-          'some second message text that is mid size in length so as to help me correctly size the bubble',
-      author: 'some second author',
-      userUid: 'some uUid',
-      timeStamp: Timestamp.now(),
-      isNew: true),
-  Message(
-      text: 'some third message text',
-      author: 'some third author',
-      userUid: 'some uUid',
-      timeStamp: Timestamp.now(),
-      isNew: true)
-];
+// final List<Message> messageHorizontalList = [
+//   Message(
+//       text:
+//           'some first message text that is very long and may need multiple lines and may cause issues with overflow if not controlled to take up less space than this will accomodate this is strange',
+//       author: 'some first author',
+//       userUid: 'some uUid',
+//       timeStamp: Timestamp.now(),
+//       isNew: true),
+//   Message(
+//       text:
+//           'some second message text that is mid size in length so as to help me correctly size the bubble',
+//       author: 'some second author',
+//       userUid: 'some uUid',
+//       timeStamp: Timestamp.now(),
+//       isNew: true),
+//   Message(
+//       text: 'some third message text',
+//       author: 'some third author',
+//       userUid: 'some uUid',
+//       timeStamp: Timestamp.now(),
+//       isNew: true)
+// ];
 
-final List<List<Message>> messageVerticalList = [
-  messageHorizontalList,
-  messageHorizontalList.sublist(1),
-  messageHorizontalList.sublist(2)
-];
+// final List<List<Message>> messageVerticalList = [
+//   messageHorizontalList,
+//   messageHorizontalList.sublist(1),
+//   messageHorizontalList.sublist(2)
+// ];
 
 /// Displays a list of SampleItems.
 class ThreadListView extends StatelessWidget {
   ThreadListView({
     Key? key,
+    required this.threadController,
   }) : super(key: key);
+
+  final ThreadController threadController;
 
   static const routeName = '/';
 
@@ -76,7 +77,7 @@ class ThreadListView extends StatelessWidget {
           // has been killed while running in the background.
           restorationId: 'threadListView',
           shrinkWrap: true,
-          itemCount: messageVerticalList.length,
+          itemCount: threadController.threads.length,
           itemBuilder: (BuildContext context, int index) {
             // return ListTile(
             //     title: Text('SampleItem ${item.id}'),
@@ -93,7 +94,7 @@ class ThreadListView extends StatelessWidget {
             //         SampleItemDetailsView.routeName,
             //       );
             //     });
-            return MessageThread(messageList: messageVerticalList[index]);
+            return MessageThread(thread: threadController.threads[index]);
           },
         ),
       ),
