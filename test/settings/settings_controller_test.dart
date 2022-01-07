@@ -1,8 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skelly/src/app.dart';
+import 'package:skelly/src/message/thread_controller.dart';
+import 'package:skelly/src/message/thread_service.dart';
 import 'package:skelly/src/settings/settings_controller.dart';
 import 'package:skelly/src/settings/settings_service.dart';
 import 'package:flutter/material.dart';
+
+import '../fake_thread_service.dart';
 
 class FakeSettingsService with SettingsService {
   ThemeMode _themeMode = ThemeMode.system;
@@ -23,6 +27,7 @@ void main() {
     test('inform the service of the value', () async {
       final service = FakeSettingsService();
       final controller = SettingsController(service);
+
       await controller.loadSettings();
 
       expect(controller.themeMode, ThemeMode.system);
@@ -37,9 +42,14 @@ void main() {
     testWidgets('inform the UI of the value', (WidgetTester tester) async {
       final service = FakeSettingsService();
       final controller = SettingsController(service);
+      final threadController = ThreadController(FakeThreadService());
+      threadController.loadThreads();
       await controller.loadSettings();
 
-      final myApp = MyApp(settingsController: controller);
+      final myApp = MyApp(
+        settingsController: controller,
+        threadController: threadController,
+      );
 
       await tester.pumpWidget(myApp);
       expect(tester.widget<MaterialApp>(find.byType(MaterialApp)).themeMode,
