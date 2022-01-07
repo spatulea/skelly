@@ -55,13 +55,12 @@ Map<String, dynamic> _mockThreadData = {
 };
 
 class ThreadService {
-  Future<Thread> thread(String threadUid) async {
-    List<Message> _threadMessageList = [];
+  Stream<Message> messageStream(String threadUid) async* {
+    Map<String, dynamic> messagesJson = _mockThreadData[threadUid];
 
-    _mockThreadData[threadUid].forEach((key, value) {
-      _threadMessageList.add(Message.fromJson(value));
-    });
-
-    return (Thread(_threadMessageList, threadUid: threadUid));
+    for (String key in messagesJson.keys) {
+      await Future<void>.delayed(const Duration(seconds: 1));
+      yield Message.fromJson(messagesJson[key], key);
+    }
   }
 }
