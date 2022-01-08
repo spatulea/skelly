@@ -1,10 +1,12 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:skelly/src/message/message.dart';
 
 // For now, let's pretend the data is static and not a stream subscription
 // as the future firestore implementation is likely to be. So we can mock
 // the firestore database as a JSON containing threads that contain messages
-Map<String, dynamic> _mockThreadData = {
+Map<String, Map<String, dynamic>> _mockThreadData = {
   'threadId1': {
     'messageUid1': {
       'author': 'author1',
@@ -55,12 +57,35 @@ Map<String, dynamic> _mockThreadData = {
 };
 
 class ThreadService {
-  Stream<Message> messageStream(String threadUid) async* {
-    Map<String, dynamic> messagesJson = _mockThreadData[threadUid];
+  static int _uidSeed = 5;
 
-    for (String key in messagesJson.keys) {
-      await Future<void>.delayed(const Duration(seconds: 1));
-      yield Message.fromJson(messagesJson[key], key);
+  static int get _getSeed {
+    _uidSeed++;
+    return _uidSeed;
+  }
+
+  Stream<Message> messageStream(String threadUid) async* {
+    // cancel the stream if the threadUid doesn't exist
+    if (!_mockThreadData.containsKey(threadUid)) return;
+
+    // Occasionally check for new messages and put them on the stream
+    // this is hokey but will eventually be replaced by Firebase
+    // and testing won't need to be this fancy
+    while (true) {
+      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
+      var keys = _mockThreadData[threadUid]!.keys.toList();
+      for (String key in keys) {
+        await Future<void>.delayed(
+            Duration(milliseconds: Random().nextInt(100)));
+        yield Message.fromJson(_mockThreadData[threadUid]!.remove(key), key);
+      }
     }
+  }
+
+  Future<void> putMessage(String threadUid, Message message) async {
+    if (!_mockThreadData.containsKey(threadUid)) return;
+
+    _mockThreadData[threadUid]!.putIfAbsent(
+        'messageUid' + _getSeed.toString(), () => message.toJson());
   }
 }

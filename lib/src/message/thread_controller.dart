@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'message.dart';
 
@@ -44,5 +45,18 @@ class ThreadController with ChangeNotifier {
       _threads.remove(threadUid);
     }
     notifyListeners();
+  }
+
+  void putToThread(String threadUid, String messageText) {
+    _threadService.putMessage(
+        threadUid,
+        Message(
+            uid: 'nan',
+            text: messageText,
+            author: 'its me!',
+            userUid: 'itsMeId',
+            timeStamp: Timestamp.now(),
+            isTest: true,
+            isNew: true));
   }
 }

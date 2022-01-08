@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 
@@ -60,7 +61,15 @@ class ThreadListView extends StatelessWidget {
                   //         SampleItemDetailsView.routeName,
                   //       );
                   //     });
-                  return MessageThread(thread: threadController.threads[index]);
+                  return GestureDetector(
+                      onTap: () async {
+                        threadController.putToThread(
+                            'threadId1',
+                            'moar! MOAR!' +
+                                Timestamp.now().toDate().toIso8601String());
+                      },
+                      child: MessageThread(
+                          thread: threadController.threads[index]));
                 },
               ),
             ),

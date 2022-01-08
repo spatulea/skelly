@@ -43,7 +43,7 @@ void main() {
       final service = FakeSettingsService();
       final controller = SettingsController(service);
       final threadController = ThreadController(FakeThreadService());
-      threadController.loadThreads();
+      threadController.subscribeThreads();
       await controller.loadSettings();
 
       final myApp = MyApp(

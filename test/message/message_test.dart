@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 
 void main() {
   final Map<dynamic, dynamic> testJson = {
+    'uid': 'testUid',
     'text': 'testText',
     'author': 'testAuthor',
     'userUid': 'testUserUid',
@@ -13,6 +14,7 @@ void main() {
     // test('create from constructor', () {});
     test('convert from json', () {
       final Message fromJsonTestMessage = Message(
+        uid: 'testUid',
         text: 'testText',
         author: 'testAuthor',
         userUid: 'testUserUid',
@@ -20,10 +22,11 @@ void main() {
         isNew: true,
         isTest: false,
       );
-      expect(Message.fromJson(testJson), fromJsonTestMessage);
+      expect(Message.fromJson(testJson, 'testUid'), fromJsonTestMessage);
     });
     test('convert to json', () {
       final Message toJsonTestMessage = Message(
+        uid: '',
         text: 'testText',
         author: 'testAuthor',
         userUid: 'testUserUid',
