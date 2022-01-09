@@ -3,6 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:skelly/src/message/send_button.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 
+enum BubbleState {
+  textField,
+  animatingToTextField,
+  plusButton,
+  animatingToPlusButton
+}
+
 class OptionsBubble extends StatefulWidget {
   const OptionsBubble(
       {Key? key, required this.threadController, required this.threadIndex})
@@ -16,12 +23,18 @@ class OptionsBubble extends StatefulWidget {
 }
 
 class _OptionsBubbleState extends State<OptionsBubble> {
-  late bool buttonMode;
+  late BubbleState _bubbleState;
+  bool get _isButtonState =>
+      _bubbleState == BubbleState.plusButton ||
+      _bubbleState == BubbleState.animatingToPlusButton;
+  bool get _isTextState =>
+      _bubbleState == BubbleState.textField ||
+      _bubbleState == BubbleState.animatingToTextField;
   final textController = TextEditingController();
 
   @override
   void initState() {
-    buttonMode = true;
+    _bubbleState = BubbleState.plusButton;
     // TODO: implement initState
     super.initState();
   }
@@ -33,52 +46,84 @@ class _OptionsBubbleState extends State<OptionsBubble> {
         Row(
           children: [
             AnimatedContainer(
-                duration: const Duration(seconds: 2),
-                curve: Curves.fastLinearToSlowEaseIn,
+                onEnd: () {
+                  setState(() {
+                    if (_bubbleState == BubbleState.animatingToPlusButton) {
+                      _bubbleState = BubbleState.plusButton;
+                    } else if (_bubbleState ==
+                        BubbleState.animatingToTextField) {
+                      _bubbleState = BubbleState.textField;
+                    }
+                  });
+                },
+                clipBehavior: Clip.hardEdge,
+                duration: const Duration(milliseconds: 400),
+                curve: Curves.easeInOut,
                 margin: const EdgeInsets.fromLTRB(10, 2, 5, 2),
-                padding: buttonMode
+                padding: _isButtonState
                     ? const EdgeInsets.fromLTRB(2, 2, 2, 2)
                     : const EdgeInsets.fromLTRB(10, 10, 10, 10),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(13),
                 ),
-                width:
-                    buttonMode ? 30 : MediaQuery.of(context).size.width - 150,
+                width: _isButtonState
+                    ? 30
+                    : MediaQuery.of(context).size.width - 150,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
+                    SendButton(
+                        iconData: _isButtonState ? Icons.add : Icons.cancel,
+                        height: 26,
+                        width: 26,
+                        onSubmit: () => setState(() {
+                              if (_isTextState) {
+                                textController.clear();
+                                _bubbleState =
+                                    BubbleState.animatingToPlusButton;
+                              } else {
+                                _bubbleState = BubbleState.animatingToTextField;
+                              }
+                            })),
                     Expanded(
-                      child: buttonMode
-                          ? Container()
-                          : TextField(
+                      child: _isTextState
+                          ? TextField(
                               controller: textController,
                               textAlignVertical: TextAlignVertical.bottom,
                               decoration: const InputDecoration(
                                   counterText: '',
-                                  contentPadding: EdgeInsets.all(2),
+                                  contentPadding: EdgeInsets.all(4),
                                   border: InputBorder.none,
                                   isDense: true),
                               minLines: 1,
                               maxLines: 8,
                               maxLength: 200,
                               autofocus: true,
-                            ),
+                            )
+                          : Container(),
                     ),
-                    SendButton(
-                        iconData: buttonMode ? Icons.add : Icons.arrow_upward,
-                        height: 26,
-                        width: 26,
-                        onSubmit: () => setState(() {
-                              if (!buttonMode) {
-                                widget.threadController.putToThread(
-                                    widget.threadController
-                                        .threads[widget.threadIndex].uid,
-                                    textController.text);
-                                textController.clear();
-                              }
-                              buttonMode = !buttonMode;
-                            })),
+                    AnimatedOpacity(
+                      curve: Curves.easeInOut,
+                      opacity:
+                          _bubbleState == BubbleState.textField ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 200),
+                      child: _bubbleState == BubbleState.textField
+                          ? SendButton(
+                              iconData: Icons.arrow_upward,
+                              height: 26,
+                              width: 26,
+                              onSubmit: () => setState(() {
+                                    widget.threadController.putToThread(
+                                        widget.threadController
+                                            .threads[widget.threadIndex].uid,
+                                        textController.text);
+                                    textController.clear();
+                                    _bubbleState =
+                                        BubbleState.animatingToPlusButton;
+                                  }))
+                          : Container(),
+                    ),
                   ],
                 )),
           ],
