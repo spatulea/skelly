@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:skelly/src/message/options_bubble.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 
 import '../settings/settings_view.dart';
@@ -37,41 +38,34 @@ class ThreadListView extends StatelessWidget {
                 ),
               ],
             ),
-            body: Container(
-              child: ListView.builder(
-                // Providing a restorationId allows the ListView to restore the
-                // scroll position when a user leaves and returns to the app after it
-                // has been killed while running in the background.
-                restorationId: 'threadListView',
-                shrinkWrap: true,
-                itemCount: threadController.threads.length,
-                itemBuilder: (BuildContext context, int index) {
-                  // return ListTile(
-                  //     title: Text('SampleItem ${item.id}'),
-                  //     leading: const CircleAvatar(
-                  //       // Display the Flutter Logo image asset.
-                  //       foregroundImage: AssetImage('assets/images/flutter_logo.png'),
-                  //     ),
-                  //     onTap: () {
-                  //       // Navigate to the details page. If the user leaves and returns to
-                  //       // the app after it has been killed while running in the
-                  //       // background, the navigation stack is restored.
-                  //       Navigator.restorablePushNamed(
-                  //         context,
-                  //         SampleItemDetailsView.routeName,
-                  //       );
-                  //     });
-                  return GestureDetector(
-                      onTap: () async {
-                        threadController.putToThread(
-                            'threadId1',
-                            'moar! MOAR!' +
-                                Timestamp.now().toDate().toIso8601String());
-                      },
-                      child: MessageThread(
-                          thread: threadController.threads[index]));
-                },
-              ),
+            body: ListView.builder(
+              // Providing a restorationId allows the ListView to restore the
+              // scroll position when a user leaves and returns to the app after it
+              // has been killed while running in the background.
+              restorationId: 'threadListView',
+              shrinkWrap: true,
+              itemCount: threadController.threads.length,
+              itemBuilder: (BuildContext context, int index) {
+                // return ListTile(
+                //     title: Text('SampleItem ${item.id}'),
+                //     leading: const CircleAvatar(
+                //       // Display the Flutter Logo image asset.
+                //       foregroundImage: AssetImage('assets/images/flutter_logo.png'),
+                //     ),
+                //     onTap: () {
+                //       // Navigate to the details page. If the user leaves and returns to
+                //       // the app after it has been killed while running in the
+                //       // background, the navigation stack is restored.
+                //       Navigator.restorablePushNamed(
+                //         context,
+                //         SampleItemDetailsView.routeName,
+                //       );
+                //     });
+                return MessageThread(
+                  threadController: threadController,
+                  threadIndex: index,
+                );
+              },
             ),
           );
         });
