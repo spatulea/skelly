@@ -23,7 +23,7 @@ class ThreadController with ChangeNotifier {
   void subscribeThreads() {
     for (String threadUid in _mockSubscribedThreads) {
       // If new thread, create w/empty messages
-      _threads.putIfAbsent(threadUid, () => Thread({}));
+      _threads.putIfAbsent(threadUid, () => Thread({}, uid: threadUid));
 
       // Keep track of subscriptions and make sure we have a single instance
       // also allows cancelling subscriptions later if needed

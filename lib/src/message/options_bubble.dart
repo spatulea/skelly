@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:skelly/src/message/send_button.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 
@@ -17,6 +17,7 @@ class OptionsBubble extends StatefulWidget {
 
 class _OptionsBubbleState extends State<OptionsBubble> {
   late bool buttonMode;
+  final textController = TextEditingController();
 
   @override
   void initState() {
@@ -50,9 +51,10 @@ class _OptionsBubbleState extends State<OptionsBubble> {
                     Expanded(
                       child: buttonMode
                           ? Container()
-                          : const TextField(
+                          : TextField(
+                              controller: textController,
                               textAlignVertical: TextAlignVertical.bottom,
-                              decoration: InputDecoration(
+                              decoration: const InputDecoration(
                                   counterText: '',
                                   contentPadding: EdgeInsets.all(2),
                                   border: InputBorder.none,
@@ -64,9 +66,17 @@ class _OptionsBubbleState extends State<OptionsBubble> {
                             ),
                     ),
                     SendButton(
+                        iconData: buttonMode ? Icons.add : Icons.arrow_upward,
                         height: 26,
                         width: 26,
                         onSubmit: () => setState(() {
+                              if (!buttonMode) {
+                                widget.threadController.putToThread(
+                                    widget.threadController
+                                        .threads[widget.threadIndex].uid,
+                                    textController.text);
+                                textController.clear();
+                              }
                               buttonMode = !buttonMode;
                             })),
                   ],
@@ -88,15 +98,3 @@ class _OptionsBubbleState extends State<OptionsBubble> {
     super.dispose();
   }
 }
-
-
-
-                  // ? IconButton(
-                  //     iconSize: 30,
-                  //     icon: const Icon(Icons.add),
-                  //     onPressed: () {
-                  //       setState(() {
-                  //         buttonMode = false;
-                  //       });
-                  //     },
-                  //   )

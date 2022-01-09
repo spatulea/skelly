@@ -26,13 +26,14 @@ class MessageBubble extends StatelessWidget {
               //     : MyColors.otherUserBubbleBackground,
               borderRadius: BorderRadius.circular(13),
             ),
-            child: Text(
-              message.text + message.text.length.toString(),
-              // style: TextStyle(
-              //     color: author == fireState.myName
-              //         ? MyColors.thisUserBubbleForeground
-              //         : MyColors.otherUserBubbleForeground),
-            ),
+            child: message.text != ''
+                ? Text(
+                    message.text,
+                  )
+                : const Icon(
+                    Icons.do_not_disturb,
+                    color: Colors.grey,
+                  ),
           ),
           Text(
             message.author,
@@ -48,8 +49,9 @@ class MessageBubble extends StatelessWidget {
 }
 
 // Some preset bubble widths based on message (and maybe author) string lenghts
-double flexWidth(int textLength, int authorLength, BuildContext context) {
-  if (textLength > 100) return MediaQuery.of(context).size.width - 100;
+double? flexWidth(int textLength, int authorLength, BuildContext context) {
+  if (textLength > 100) return (MediaQuery.of(context).size.width - 100);
   if (textLength > 50) return 200;
-  return 150.0;
+  if (textLength > 20) return 150;
+  return null;
 }

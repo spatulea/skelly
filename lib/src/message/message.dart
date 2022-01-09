@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart'
     show Timestamp, FieldValue;
 
 class Thread {
-  Thread(this.messages);
+  Thread(this.messages, {required this.uid});
+  final String uid;
   final Map<String, Message> messages;
 }
 

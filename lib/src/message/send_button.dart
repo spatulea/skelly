@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class SendButton extends StatelessWidget {
   const SendButton({
     Key? key,
+    required this.iconData,
     this.width = 26,
     this.height = 26,
     this.onSubmit,
@@ -11,6 +12,7 @@ class SendButton extends StatelessWidget {
   final VoidCallback? onSubmit;
   final double width;
   final double height;
+  final IconData iconData;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +26,7 @@ class SendButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(13),
         ),
         child: Icon(
-          Icons.arrow_upward,
+          iconData,
           color: Colors.grey.shade100,
         ),
       ),
