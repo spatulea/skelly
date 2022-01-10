@@ -43,7 +43,7 @@ class ThreadListView extends StatelessWidget {
               // scroll position when a user leaves and returns to the app after it
               // has been killed while running in the background.
               restorationId: 'threadListView',
-              shrinkWrap: true,
+              shrinkWrap: false,
               itemCount: threadController.threads.length,
               itemBuilder: (BuildContext context, int index) {
                 // return ListTile(

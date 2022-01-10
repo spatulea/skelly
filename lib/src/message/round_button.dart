@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SendButton extends StatelessWidget {
-  const SendButton({
+class RoundButton extends StatelessWidget {
+  const RoundButton({
     Key? key,
     required this.iconData,
     this.width = 26,

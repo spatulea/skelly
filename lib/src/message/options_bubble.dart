@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:skelly/src/message/send_button.dart';
+import 'package:skelly/src/message/round_button.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 
 enum BubbleState {
@@ -73,7 +73,7 @@ class _OptionsBubbleState extends State<OptionsBubble> {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    SendButton(
+                    RoundButton(
                         iconData: _isButtonState ? Icons.add : Icons.cancel,
                         height: 26,
                         width: 26,
@@ -109,7 +109,7 @@ class _OptionsBubbleState extends State<OptionsBubble> {
                           _bubbleState == BubbleState.textField ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 200),
                       child: _bubbleState == BubbleState.textField
-                          ? SendButton(
+                          ? RoundButton(
                               iconData: Icons.arrow_upward,
                               height: 26,
                               width: 26,
