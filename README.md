@@ -17,4 +17,4 @@ Tag along as skelly evolves from template to messaging app.
     - Use Firestore security rules to manage access control and data validation (no cloud functions)
   - Submit (and be accepted by) both app stores
     - Include reporting and blocking/unsubscribe features as required by app stores
-  - Last but perhaps most important: learn
+  - Last but perhaps most important: **learn**
