@@ -1,19 +1,27 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:skelly/src/message/thread_controller.dart';
-import 'package:skelly/src/message/thread_service.dart';
+import 'package:skelly/src/user/auth_service.dart';
 
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
 import 'src/settings/settings_service.dart';
 import 'src/user/user_service.dart';
+import 'src/user/user_controller.dart';
+import 'src/message/thread_controller.dart';
+import 'src/message/thread_service.dart';
 
 void main() async {
-  // Set up the SettingsController, which will glue user settings to multiple
-  // Flutter Widgets.
-  final settingsController = SettingsController(SettingsService());
-  final threadController = ThreadController(ThreadService());
+  // Initialize Firebase
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
-  UserService.initialize(userUid: 'userUid1');
+  // Set up the Services and Controllers we need
+  final settingsController = SettingsController(SettingsService());
+  final userService = UserService();
+  final userController = UserController(userService, AuthService());
+  final threadController = ThreadController(userService, ThreadService());
+
+  await userController.initialize();
   threadController.subscribeThreads();
 
   // Load the user's preferred theme while the splash screen is displayed.

@@ -7,12 +7,11 @@ import 'message.dart';
 import 'thread_service.dart';
 import '../user/user_service.dart';
 
-List<String> _mockSubscribedThreads = ['threadId1', 'threadId2'];
-
 class ThreadController with ChangeNotifier {
-  ThreadController(this._threadService);
+  ThreadController(this._userService, this._threadService);
 
   final ThreadService _threadService;
+  final UserService _userService;
 
   Map<String, Thread> _threads = {};
 
@@ -24,7 +23,7 @@ class ThreadController with ChangeNotifier {
   void subscribeThreads() {
     // TODO implement sync (allow removing as well as adding) functionality
     // between the service and controller (maybe clear _threads first?)
-    UserService.subscribedThreads.listen((subscribedThreads) {
+    _userService.subscribedThreads.listen((subscribedThreads) {
       // TODO maybe compare _threads and stream content to add/remove _threads
       _threads.clear();
       _threadSubscriptions.clear();
