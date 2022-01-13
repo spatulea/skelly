@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:skelly/src/debug/debug.dart';
+
 Map<String, Map<String, dynamic>> _mockUsersCollection = {
   'userUid1': {
     'displayName': 'someName',
@@ -14,9 +16,7 @@ Map<String, Map<String, dynamic>> _mockUsersCollection = {
 };
 
 class UserService {
-  // static late Stream<String?> _userDisplayName;
-  // static late Stream<Set<String>> _subscribedThreads;
-  // static late Stream<Set<String>> _authoredThreads;
+  static const _className = 'UserService';
 
   Stream<String?> get userDisplayName => _userDisplayName();
   Stream<Set<String>> get subscribedThreads => _subscribedThreads();
@@ -25,14 +25,18 @@ class UserService {
   static late String _thisUserUid;
 
   Future<void> initialize({required String userUid}) async {
+    const String _origin = _className + '.initialize';
+
     // Make sure the user's uid is in the collection, or create a new one!
-    _mockUsersCollection.putIfAbsent(
-        userUid,
-        () => <String, dynamic>{
-              'displayName': userUid,
-              'subscribedThreads': {'threadId1', 'threadId2'},
-              'authoredThreads': {'threadId2'},
-            });
+    _mockUsersCollection.putIfAbsent(userUid, () {
+      debug('Adding user $userUid to users collection', origin: _origin);
+
+      return <String, dynamic>{
+        'displayName': userUid,
+        'subscribedThreads': {'threadId1'},
+        'authoredThreads': {'threadId1'},
+      };
+    });
 
     _thisUserUid = userUid;
   }
@@ -57,8 +61,10 @@ class UserService {
       await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
       var _new = _mockUsersCollection[_thisUserUid]!['subscribedThreads']
           as Set<String>;
-      if (_new != _cached) {
-        _cached = _new;
+      if (_new.difference(_cached).isNotEmpty) {
+        debug('Yielding new subscribedThread set $_new',
+            origin: _className + '._subscribedThreads.stream');
+        _cached = Set<String>.from(_new);
         yield _new;
       }
     }
