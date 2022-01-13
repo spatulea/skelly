@@ -61,7 +61,8 @@ class UserService {
       await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
       var _new = _mockUsersCollection[_thisUserUid]!['subscribedThreads']
           as Set<String>;
-      if (_new.difference(_cached).isNotEmpty) {
+      if (_new.difference(_cached).isNotEmpty ||
+          _cached.difference(_new).isNotEmpty) {
         debug('Yielding new subscribedThread set $_new',
             origin: _className + '._subscribedThreads.stream');
         _cached = Set<String>.from(_new);
@@ -77,16 +78,27 @@ class UserService {
       await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
       var _new =
           _mockUsersCollection[_thisUserUid]!['authoredThreads'] as Set<String>;
-      if (_new != _cached) {
-        _cached = _new;
+      if (_new.difference(_cached).isNotEmpty ||
+          _cached.difference(_new).isNotEmpty) {
+        debug('Yielding new authoredThread set $_new',
+            origin: _className + '._subscribedThreads.stream');
+        _cached = Set<String>.from(_new);
         yield _new;
       }
     }
   }
 
   Future<void> subscribeToThread(String threadUid) async {
-    // TODO add check that thread exists (convert ThreadService to abstract?)
+    var subscribedThreads =
+        _mockUsersCollection[_thisUserUid]!['subscribedThreads'] as Set<String>;
 
-    _mockUsersCollection[_thisUserUid]!['subscribedThreads'].add(threadUid);
+    subscribedThreads.add(threadUid);
+  }
+
+  Future<void> unsubscribeFromThread(String threadUid) async {
+    var subscribedThreads =
+        _mockUsersCollection[_thisUserUid]!['subscribedThreads'] as Set<String>;
+
+    subscribedThreads.remove(threadUid);
   }
 }

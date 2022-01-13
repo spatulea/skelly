@@ -64,17 +64,19 @@ class ThreadController with ChangeNotifier {
         // remove the threadUid from the listener cache
         cachedSubscribedThreads.remove(threadUid);
       }
+
+      notifyListeners();
     });
   }
 
-  void removeThreads(Set<String> threadUids) {
-    const String _origin = _className + '.removeThreads';
-    for (String threadUid in threadUids) {
-      _threadSubscriptions.remove(threadUid);
-      _threads.remove(threadUid);
-    }
-    notifyListeners();
-  }
+  // void removeThreads(Set<String> threadUids) {
+  //   const String _origin = _className + '.removeThreads';
+  //   for (String threadUid in threadUids) {
+  //     _threadSubscriptions.remove(threadUid);
+  //     _threads.remove(threadUid);
+  //   }
+  //   notifyListeners();
+  // }
 
   void putToThread(String threadUid, String messageText) {
     const String _origin = _className + '.putToThread';
@@ -95,5 +97,9 @@ class ThreadController with ChangeNotifier {
   Future<void> createThread(Message message) async {
     final newThreadUid = await _threadService.createThread(message);
     _userService.subscribeToThread(newThreadUid);
+  }
+
+  Future<void> unsubscribeThread(Thread thread) async {
+    _userService.unsubscribeFromThread(thread.uid);
   }
 }
