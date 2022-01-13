@@ -25,20 +25,18 @@ class ThreadController with ChangeNotifier {
 
   void subscribeThreads() {
     const String _origin = _className + '.subscribeThreads';
-    // TODO implement sync (allow removing as well as adding) functionality
-    // between the service and controller (maybe clear _threads first?)
+
+    Set<String> cachedSubscribedThreads = {};
     _userService.subscribedThreads.listen((subscribedThreads) {
-      // TODO maybe compare _threads and stream content to add/remove _threads
-      _threads.clear();
-      _threadSubscriptions.clear();
-      for (String threadUid in subscribedThreads) {
-        // If new thread, create w/empty messages
-        // TODO putIfAbsent is not the best solution here
+      // Find and subscribe to the new threads
+      for (String threadUid
+          in subscribedThreads.difference(cachedSubscribedThreads)) {
+        debug('Adding new thread subscription $threadUid', origin: _origin);
+
+        // Create the local empty thread
         _threads.putIfAbsent(threadUid, () => Thread({}, uid: threadUid));
 
-        // Keep track of subscriptions and make sure we have a single instance
-        // also allows cancelling subscriptions later if needed
-        // TODO putIfAbsent is not the best solution here either
+        // create and add the message stream
         _threadSubscriptions.putIfAbsent(
             threadUid,
             () => _threadService.messageStream(threadUid).listen((newMessage) {
@@ -48,6 +46,23 @@ class ThreadController with ChangeNotifier {
                       .putIfAbsent(newMessage.uid, () => newMessage);
                   notifyListeners();
                 }));
+        // Add the new threads to listener cache
+        cachedSubscribedThreads.add(threadUid);
+      }
+
+      // Find and cancel subscriptions to old threads
+      for (String threadUid
+          in cachedSubscribedThreads.difference(subscribedThreads)) {
+        debug('Removing old thread subscription $threadUid', origin: _origin);
+        // Cancel the subscription and remove it.
+        _threadSubscriptions[threadUid]?.cancel();
+        _threadSubscriptions.remove(threadUid);
+
+        // remove the thread local thread cache
+        _threads.remove(threadUid);
+
+        // remove the threadUid from the listener cache
+        cachedSubscribedThreads.remove(threadUid);
       }
     });
   }
@@ -79,7 +94,6 @@ class ThreadController with ChangeNotifier {
 
   Future<void> createThread(Message message) async {
     final newThreadUid = await _threadService.createThread(message);
-    debug('Created new thread $newThreadUid');
     _userService.subscribeToThread(newThreadUid);
   }
 }
