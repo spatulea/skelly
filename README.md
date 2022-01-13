@@ -18,3 +18,35 @@ Tag along as skelly evolves from template to messaging app.
   - Submit (and be accepted by) both app stores
     - Include reporting and blocking/unsubscribe features as required by app stores
   - Last but perhaps most important: **learn**
+
+## Notes
+  - ios/Runner/GoogleService-Info.plist is encrypted to protect the API key.
+  - Firebase resources are organized as follows:
+    - Authentication
+      - Anonymous
+    - Firestore Collections
+      - threads
+        - threadUid
+          - messageUid
+            - text
+            - author
+            - userUid
+            - timeStamp
+          - messageUid
+            - ...
+        - threadUid
+          - ...
+        - ...
+      - users
+        - userUid
+          - displayName
+          - subscribedThreads
+            - threadUid1
+            - threadUid2
+            - ...
+          - authoredThreads
+            - threadUid1
+            - ...
+        - userUid
+          - ...
+        - ...
