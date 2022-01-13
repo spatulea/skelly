@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:skelly/src/debug/debug.dart';
 import 'message.dart';
 
 import 'thread_service.dart';
@@ -9,6 +10,8 @@ import '../user/user_service.dart';
 
 class ThreadController with ChangeNotifier {
   ThreadController(this._userService, this._threadService);
+
+  static const String _className = 'ThreadController';
 
   final ThreadService _threadService;
   final UserService _userService;
@@ -21,6 +24,7 @@ class ThreadController with ChangeNotifier {
   List<Thread> get threads => _threads.values.toList();
 
   void subscribeThreads() {
+    const String _origin = _className + '.subscribeThreads';
     // TODO implement sync (allow removing as well as adding) functionality
     // between the service and controller (maybe clear _threads first?)
     _userService.subscribedThreads.listen((subscribedThreads) {
@@ -49,6 +53,7 @@ class ThreadController with ChangeNotifier {
   }
 
   void removeThreads(Set<String> threadUids) {
+    const String _origin = _className + '.removeThreads';
     for (String threadUid in threadUids) {
       _threadSubscriptions.remove(threadUid);
       _threads.remove(threadUid);
@@ -57,15 +62,24 @@ class ThreadController with ChangeNotifier {
   }
 
   void putToThread(String threadUid, String messageText) {
+    const String _origin = _className + '.putToThread';
+
+    debug('Adding message to thread $threadUid', origin: _origin);
     _threadService.putMessage(
         threadUid,
         Message(
-            uid: 'nan',
+            uid: '',
             text: messageText,
             author: 'its me!',
             userUid: 'itsMeId',
             timeStamp: Timestamp.now(),
             isTest: true,
             isNew: true));
+  }
+
+  Future<void> createThread(Message message) async {
+    final newThreadUid = await _threadService.createThread(message);
+    debug('Created new thread $newThreadUid');
+    _userService.subscribeToThread(newThreadUid);
   }
 }
