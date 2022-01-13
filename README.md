@@ -3,7 +3,7 @@
 Tag along as skelly evolves from template to messaging app.
 
 ## Goals
-  - Create a thread-based messaging app where users can create, share & join messaging threads and communicate with uther users in those threads.
+  - Create a thread-based messaging app where users can create, share & join messaging threads and communicate with other users in those threads.
   - Develop the app following guidelines set by the Flutter team's skeleton template:
     - Minimal use of 3rd party widgets
     - Use ChangeNotifier+AnimatedBuilder for "state management" (this goal may change as the app evolves if the method proves too awkward)
