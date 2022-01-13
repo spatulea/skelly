@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 import 'package:skelly/src/message/round_button.dart';
@@ -114,10 +115,17 @@ class _OptionsBubbleState extends State<OptionsBubble> {
                               height: 26,
                               width: 26,
                               onSubmit: () => setState(() {
-                                    widget.threadController.putToThread(
-                                        widget.threadController
-                                            .threads[widget.threadIndex].uid,
-                                        textController.text);
+                                    if (widget.threadIndex >=
+                                        widget
+                                            .threadController.threads.length) {
+                                      widget.threadController
+                                          .createThread(textController.text);
+                                    } else {
+                                      widget.threadController.putToThread(
+                                          widget.threadController
+                                              .threads[widget.threadIndex].uid,
+                                          textController.text);
+                                    }
                                     textController.clear();
                                     _bubbleState =
                                         BubbleState.animatingToPlusButton;

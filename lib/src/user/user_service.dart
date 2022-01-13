@@ -24,6 +24,8 @@ class UserService {
 
   static late String _thisUserUid;
 
+  String get currentUserUid => _thisUserUid;
+
   Future<void> initialize({required String userUid}) async {
     const String _origin = _className + '.initialize';
 

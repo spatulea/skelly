@@ -17,51 +17,59 @@ class MessageThread extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Thread thread = threadController.threads[threadIndex];
+    final Thread? thread;
+    final bool isLast = threadIndex >= threadController.threads.length;
 
-    return GestureDetector(
-      onTap: () {
-        threadController.createThread(Message(
-            uid: '',
-            text: 'new thread!',
-            author: 'itsa me!',
-            userUid: 'itsameUid',
-            timeStamp: Timestamp.now(),
-            isNew: true,
-            isTest: true));
-      },
-      child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
+    if (!isLast) {
+      thread = threadController.threads[threadIndex];
+    } else {
+      thread = null;
+    }
+    return isLast
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              // TODO optimize building of large threads
-              for (var message in thread.messages.values)
-                MessageBubble(message: message),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(13),
-                      ),
-                      padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-                      margin: const EdgeInsets.fromLTRB(10, 2, 5, 2),
-                      child: RoundButton(
-                        iconData: Icons.remove,
-                        color: Colors.red,
-                        onSubmit: () =>
-                            threadController.unsubscribeThread(thread),
-                      )),
-                  OptionsBubble(
-                    threadController: threadController,
-                    threadIndex: threadIndex,
-                  ),
-                ],
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 10, 5, 10),
+                child: OptionsBubble(
+                  threadController: threadController,
+                  threadIndex: threadIndex,
+                ),
               ),
-            ].reversed.toList(),
-          )),
-    );
+            ],
+          )
+        : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                // TODO optimize building of large threads
+                for (var message in thread!.messages.values)
+                  MessageBubble(message: message),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade300,
+                          borderRadius: BorderRadius.circular(13),
+                        ),
+                        padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
+                        margin: const EdgeInsets.fromLTRB(10, 2, 5, 2),
+                        child: RoundButton(
+                          iconData: Icons.remove,
+                          color: Colors.red.shade300,
+                          onSubmit: () =>
+                              threadController.unsubscribeThread(thread!),
+                        )),
+                    OptionsBubble(
+                      threadController: threadController,
+                      threadIndex: threadIndex,
+                    ),
+                  ],
+                ),
+              ].reversed.toList(),
+            ));
   }
 }

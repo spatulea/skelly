@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:skelly/src/message/options_bubble.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 
 import '../settings/settings_view.dart';
@@ -44,7 +42,7 @@ class ThreadListView extends StatelessWidget {
               // has been killed while running in the background.
               restorationId: 'threadListView',
               shrinkWrap: false,
-              itemCount: threadController.threads.length,
+              itemCount: threadController.threads.length + 1,
               itemBuilder: (BuildContext context, int index) {
                 // return ListTile(
                 //     title: Text('SampleItem ${item.id}'),

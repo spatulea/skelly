@@ -94,8 +94,16 @@ class ThreadController with ChangeNotifier {
             isNew: true));
   }
 
-  Future<void> createThread(Message message) async {
-    final newThreadUid = await _threadService.createThread(message);
+  // TODO make displayName available
+  Future<void> createThread(String messageText) async {
+    final newThreadUid = await _threadService.createThread(Message(
+        uid: '',
+        text: messageText,
+        author: 'borked',
+        userUid: _userService.currentUserUid,
+        timeStamp: Timestamp.now(),
+        isNew: true,
+        isTest: true));
     _userService.subscribeToThread(newThreadUid);
   }
 
