@@ -18,16 +18,19 @@ class UserController with ChangeNotifier {
   UserController(this._userService, this._authService);
 
   Future<void> initialize() async {
-    await _authService.initialize();
     const String _origin = _className + '.initialize';
+
+    await _authService.initialize();
 
     // wait for a uid to be available
     _userUid =
         await _authService.authUid.firstWhere((authUid) => authUid != null);
     // and initialize the UserService
     await _userService.initialize(userUid: _userUid!);
+
     // And attach a listener to the user's displayName
     _userService.userDisplayName.listen((newName) {
+      debug('Received new userUid $newName', origin: _origin);
       if (newName != null) {
         _displayName = newName;
         notifyListeners();
