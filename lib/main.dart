@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:skelly/src/debug/debug.dart';
 import 'package:skelly/src/user/auth_service.dart';
 
 import 'src/app.dart';
@@ -11,9 +12,12 @@ import 'src/message/thread_controller.dart';
 import 'src/message/thread_service.dart';
 
 void main() async {
+  const String _origin = 'main';
+  debug('App Start', origin: _origin);
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  debug('Firebase Initialized', origin: _origin);
 
   // Set up the Services and Controllers we need
   final settingsController = SettingsController(SettingsService());
