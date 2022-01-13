@@ -73,13 +73,15 @@ class ThreadService {
     // Occasionally check for new messages and put them on the stream
     // this is hokey but will eventually be replaced by Firebase
     // and testing won't need to be this fancy
+    Set<String> cachedKeys = {};
     while (true) {
       await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
-      var keys = _mockThreadData[threadUid]!.keys.toList();
-      for (String key in keys) {
+      var newKeys = _mockThreadData[threadUid]!.keys.toSet();
+      for (String key in newKeys.difference(cachedKeys)) {
         await Future<void>.delayed(
             Duration(milliseconds: Random().nextInt(100)));
-        yield Message.fromJson(_mockThreadData[threadUid]!.remove(key), key);
+        cachedKeys.add(key);
+        yield Message.fromJson(_mockThreadData[threadUid]![key], key);
       }
     }
   }
@@ -93,7 +95,8 @@ class ThreadService {
 
   Future<String> createThread(Message message) async {
     final String newThreadUid = _getSeed.toString();
-    _mockThreadData[newThreadUid] = {_getSeed.toString(): message.toJson()};
+    _mockThreadData.putIfAbsent(
+        newThreadUid, () => {_getSeed.toString(): message.toJson()});
     debug('Created thread: ${_mockThreadData[newThreadUid]}',
         origin: _className + '.createThread');
     return newThreadUid;
