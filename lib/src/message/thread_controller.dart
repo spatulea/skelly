@@ -16,7 +16,7 @@ class ThreadController with ChangeNotifier {
   final ThreadService _threadService;
   final UserService _userService;
 
-  Map<String, Thread> _threads = {};
+  final Map<String, Thread> _threads = {};
 
   final Map<String, StreamSubscription> _threadSubscriptions = {};
 
