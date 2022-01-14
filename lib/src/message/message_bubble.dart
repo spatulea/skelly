@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:skelly/src/user/user_controller.dart';
 import 'message.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({
     required this.message,
+    required this.userController,
     Key? key,
   }) : super(key: key);
 
   final Message message;
+  final UserController userController;
 
   @override
   Widget build(BuildContext context) {
+    final bool isAuthor = message.userUid == (userController.userUid ?? '');
     return Container(
       padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
       width: flexWidth(message.text.length, message.author.length, context),
@@ -20,10 +24,7 @@ class MessageBubble extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
             decoration: BoxDecoration(
-              color: Colors.amber,
-              // color: author == fireState.myName
-              //     ? MyColors.thisUserBubbleBackground
-              //     : MyColors.otherUserBubbleBackground,
+              color: isAuthor ? Colors.blue.shade300 : Colors.grey.shade400,
               borderRadius: BorderRadius.circular(13),
             ),
             child: message.text != ''

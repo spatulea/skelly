@@ -38,5 +38,6 @@ void main() async {
   runApp(MyApp(
     settingsController: settingsController,
     threadController: threadController,
+    userController: userController,
   ));
 }

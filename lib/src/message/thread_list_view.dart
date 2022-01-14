@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:skelly/src/message/thread_controller.dart';
+import 'package:skelly/src/user/user_controller.dart';
 
 import '../settings/settings_view.dart';
 import 'message_thread.dart';
 
 /// Displays a list of SampleItems.
 class ThreadListView extends StatelessWidget {
-  ThreadListView({
+  const ThreadListView({
     Key? key,
     required this.threadController,
+    required this.userController,
   }) : super(key: key);
 
   final ThreadController threadController;
+  final UserController userController;
 
   static const routeName = '/';
 
@@ -60,6 +63,7 @@ class ThreadListView extends StatelessWidget {
                 //       );
                 //     });
                 return MessageThread(
+                  userController: userController,
                   threadController: threadController,
                   threadIndex: index,
                 );

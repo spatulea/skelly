@@ -8,21 +8,21 @@ class Thread {
 }
 
 class Message {
-  final String uid;
+  final String? uid;
   final String text;
   final String author;
   final String userUid;
-  final Timestamp timeStamp;
-  bool isNew;
+  final Timestamp? timeStamp;
+  bool? isNew;
   final bool isTest;
 
   Message(
-      {required this.uid,
+      {this.uid,
       required this.text,
       required this.author,
       required this.userUid,
-      required this.timeStamp,
-      required this.isNew,
+      this.timeStamp,
+      this.isNew,
       this.isTest = false});
 
   Message.fromJson(Map<dynamic, dynamic> json, this.uid)
@@ -39,7 +39,7 @@ class Message {
         'author': author,
         'userUid': userUid,
         // if testing use given timestamp not remote
-        'timeStamp': isTest ? timeStamp : FieldValue.serverTimestamp(),
+        'timeStamp': isTest ? Timestamp.now() : FieldValue.serverTimestamp(),
       };
 
   // Enable object comparison (ignoring isTest)

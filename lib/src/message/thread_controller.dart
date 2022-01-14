@@ -43,7 +43,7 @@ class ThreadController with ChangeNotifier {
                   // Add new messages to the thread and notify the UI
                   _threads[threadUid]!
                       .messages
-                      .putIfAbsent(newMessage.uid, () => newMessage);
+                      .putIfAbsent(newMessage.uid!, () => newMessage);
                   notifyListeners();
                 }));
         // Add the new threads to listener cache
@@ -69,41 +69,15 @@ class ThreadController with ChangeNotifier {
     });
   }
 
-  // void removeThreads(Set<String> threadUids) {
-  //   const String _origin = _className + '.removeThreads';
-  //   for (String threadUid in threadUids) {
-  //     _threadSubscriptions.remove(threadUid);
-  //     _threads.remove(threadUid);
-  //   }
-  //   notifyListeners();
-  // }
-
-  void putToThread(String threadUid, String messageText) {
+  void putToThread(String threadUid, Message message) {
     const String _origin = _className + '.putToThread';
 
     debug('Adding message to thread $threadUid', origin: _origin);
-    _threadService.putMessage(
-        threadUid,
-        Message(
-            uid: '',
-            text: messageText,
-            author: 'its me!',
-            userUid: 'itsMeId',
-            timeStamp: Timestamp.now(),
-            isTest: true,
-            isNew: true));
+    _threadService.putMessage(threadUid, message);
   }
 
-  // TODO make displayName available
-  Future<void> createThread(String messageText) async {
-    final newThreadUid = await _threadService.createThread(Message(
-        uid: '',
-        text: messageText,
-        author: 'borked',
-        userUid: _userService.currentUserUid,
-        timeStamp: Timestamp.now(),
-        isNew: true,
-        isTest: true));
+  Future<void> createThread(Message message) async {
+    final newThreadUid = await _threadService.createThread(message);
     _userService.subscribeToThread(newThreadUid);
   }
 

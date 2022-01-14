@@ -34,7 +34,7 @@ class UserService {
       debug('Adding user $userUid to users collection', origin: _origin);
 
       return <String, dynamic>{
-        'displayName': userUid,
+        'displayName': 'Mario',
         'subscribedThreads': {'threadId1'},
         'authoredThreads': {'threadId1'},
       };

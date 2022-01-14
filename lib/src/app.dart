@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:skelly/src/message/thread_controller.dart';
+import 'package:skelly/src/user/user_controller.dart';
 
 import 'sample_feature/sample_item_details_view.dart';
 import 'message/thread_list_view.dart';
@@ -10,14 +11,16 @@ import 'settings/settings_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
-  const MyApp({
-    Key? key,
-    required this.settingsController,
-    required this.threadController,
-  }) : super(key: key);
+  const MyApp(
+      {Key? key,
+      required this.settingsController,
+      required this.threadController,
+      required this.userController})
+      : super(key: key);
 
   final SettingsController settingsController;
   final ThreadController threadController;
+  final UserController userController;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +81,7 @@ class MyApp extends StatelessWidget {
                   default:
                     return ThreadListView(
                       threadController: threadController,
+                      userController: userController,
                     );
                 }
               },
