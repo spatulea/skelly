@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:skelly/src/message/message.dart';
 
 import 'package:skelly/src/message/round_button.dart';
 import 'package:skelly/src/message/thread_controller.dart';
+import 'package:skelly/src/user/user_controller.dart';
 
 enum BubbleState {
   textField,
@@ -11,19 +13,23 @@ enum BubbleState {
   animatingToPlusButton
 }
 
-class OptionsBubble extends StatefulWidget {
-  const OptionsBubble(
-      {Key? key, required this.threadController, required this.threadIndex})
+class InputBubble extends StatefulWidget {
+  const InputBubble(
+      {Key? key,
+      required this.userController,
+      required this.threadController,
+      required this.threadIndex})
       : super(key: key);
 
+  final UserController userController;
   final ThreadController threadController;
   final int threadIndex;
 
   @override
-  State<OptionsBubble> createState() => _OptionsBubbleState();
+  State<InputBubble> createState() => _InputBubbleState();
 }
 
-class _OptionsBubbleState extends State<OptionsBubble> {
+class _InputBubbleState extends State<InputBubble> {
   late BubbleState _bubbleState;
   bool get _isButtonState =>
       _bubbleState == BubbleState.plusButton ||
@@ -31,17 +37,23 @@ class _OptionsBubbleState extends State<OptionsBubble> {
   bool get _isTextState =>
       _bubbleState == BubbleState.textField ||
       _bubbleState == BubbleState.animatingToTextField;
-  final textController = TextEditingController();
+  late final TextEditingController textController;
+  late bool isLastIndex;
 
   @override
   void initState() {
     _bubbleState = BubbleState.plusButton;
+    textController = TextEditingController();
     // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // If the build index is greater than the number of threads then we're
+    // drawing the "new thread" input bubble
+    isLastIndex = widget.threadIndex >= widget.threadController.threads.length;
+
     return Column(
       children: [
         Row(
@@ -115,16 +127,23 @@ class _OptionsBubbleState extends State<OptionsBubble> {
                               height: 26,
                               width: 26,
                               onSubmit: () => setState(() {
-                                    if (widget.threadIndex >=
-                                        widget
-                                            .threadController.threads.length) {
+                                    final Message message = Message(
+                                        text: textController.text,
+                                        author:
+                                            widget.userController.displayName!,
+                                        userUid: widget.userController.userUid!,
+                                        isTest: true);
+                                    if (isLastIndex) {
                                       widget.threadController
-                                          .createThread(textController.text);
+                                          .createThread(message);
                                     } else {
-                                      widget.threadController.putToThread(
-                                          widget.threadController
-                                              .threads[widget.threadIndex].uid,
-                                          textController.text);
+                                      final String threadUid = widget
+                                          .threadController
+                                          .threads[widget.threadIndex]
+                                          .uid;
+
+                                      widget.threadController
+                                          .putToThread(threadUid, message);
                                     }
                                     textController.clear();
                                     _bubbleState =
@@ -148,6 +167,7 @@ class _OptionsBubbleState extends State<OptionsBubble> {
   @override
   void dispose() {
     // TODO: implement dispose
+    textController.dispose();
     super.dispose();
   }
 }
