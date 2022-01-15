@@ -1,6 +1,6 @@
 # skelly
 
-Tag along as skelly evolves from template to messaging app.
+Tag along as skelly evolves from Flutter's skeleton template to a reactive messaging app.
 
 ## Goals
   - Create a thread-based messaging app where users can create, share & join messaging threads and communicate with other users in those threads.
