@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
 import 'package:skelly/src/debug/debug.dart';
 import 'package:skelly/src/message/message.dart';
+import 'package:skelly/src/message/thread_service.dart';
 
 // For now, let's pretend the data is static and not a stream subscription
 // as the future firestore implementation is likely to be. So we can mock
@@ -57,7 +58,7 @@ Map<String, Map<String, dynamic>> _mockThreadData = {
   },
 };
 
-class MockThreadService {
+class MockThreadService implements ThreadService {
   static const String _className = 'MockThreadService';
   static int _uidSeed = 238976;
 
@@ -66,6 +67,7 @@ class MockThreadService {
     return _uidSeed;
   }
 
+  @override
   Stream<Message> messageStream(String threadUid) async* {
     // cancel the stream if the threadUid doesn't exist
     if (!_mockThreadData.containsKey(threadUid)) return;
@@ -86,6 +88,7 @@ class MockThreadService {
     }
   }
 
+  @override
   Future<void> putMessage(String threadUid, Message message) async {
     if (!_mockThreadData.containsKey(threadUid)) return;
 
@@ -93,6 +96,7 @@ class MockThreadService {
         'messageUid' + _getSeed.toString(), () => message.toJson());
   }
 
+  @override
   Future<String> createThread(Message message) async {
     final String newThreadUid = _getSeed.toString();
     _mockThreadData.putIfAbsent(

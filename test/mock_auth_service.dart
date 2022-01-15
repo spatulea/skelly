@@ -1,8 +1,8 @@
 import 'package:skelly/src/user/auth_service.dart';
 
-class MockAuthService with AuthService {
+class MockAuthService implements AuthService {
   Stream<String?> _mockFirebaseAuthStream() async* {
-    List<String?> mockUids = [null, 'someAuthUid'];
+    List<String?> mockUids = [null, 'userUid1'];
 
     for (String? uid in mockUids) {
       await Future<void>.delayed(const Duration(milliseconds: 10));

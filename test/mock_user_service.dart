@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:skelly/src/debug/debug.dart';
+import 'package:skelly/src/user/user_service.dart';
 
 Map<String, Map<String, dynamic>> _mockUsersCollection = {
   'userUid1': {
@@ -15,17 +16,22 @@ Map<String, Map<String, dynamic>> _mockUsersCollection = {
   }
 };
 
-class MockUserService {
+class MockUserService implements UserService {
   static const _className = 'MockUserService';
 
+  @override
   Stream<String?> get userDisplayName => _userDisplayName();
+  @override
   Stream<Set<String>> get subscribedThreads => _subscribedThreads();
+  @override
   Stream<Set<String>> get authoredThreads => _authoredThreads();
 
   static late String _thisUserUid;
 
+  @override
   String get currentUserUid => _thisUserUid;
 
+  @override
   Future<void> initialize({required String userUid}) async {
     const String _origin = _className + '.initialize';
 
@@ -90,6 +96,7 @@ class MockUserService {
     }
   }
 
+  @override
   Future<void> subscribeToThread(String threadUid) async {
     var subscribedThreads =
         _mockUsersCollection[_thisUserUid]!['subscribedThreads'] as Set<String>;
@@ -97,6 +104,7 @@ class MockUserService {
     subscribedThreads.add(threadUid);
   }
 
+  @override
   Future<void> unsubscribeFromThread(String threadUid) async {
     var subscribedThreads =
         _mockUsersCollection[_thisUserUid]!['subscribedThreads'] as Set<String>;
