@@ -39,7 +39,7 @@ class Message {
         'author': author,
         'userUid': userUid,
         // if testing use given timestamp not remote
-        'timeStamp': isTest ? Timestamp.now() : FieldValue.serverTimestamp(),
+        'timeStamp': isTest ? (timeStamp ?? 0) : FieldValue.serverTimestamp(),
       };
 
   // Enable object comparison (ignoring isTest)
