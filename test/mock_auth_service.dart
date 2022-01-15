@@ -1,11 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:skelly/src/debug/debug.dart';
 import 'package:skelly/src/user/auth_service.dart';
 
 class MockAuthService with AuthService {
-  static const String _className = 'AuthService';
+  Stream<String?> _mockFirebaseAuthStream() async* {
+    List<String?> mockUids = [null, 'someAuthUid'];
 
-  static late FirebaseAuth _auth;
+    for (String? uid in mockUids) {
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      yield uid;
+    }
+  }
 
   static late Stream<String?> _authUid;
 
@@ -14,21 +17,9 @@ class MockAuthService with AuthService {
 
   @override
   Future<void> initialize() async {
-    const String _origin = _className + '.initialize';
-
-    _auth = FirebaseAuth.instance;
-
-    // attach our _authUid stream to FirebaseAuth's authState stream
-    // picking out the userUid for _authUid
-    _authUid = _auth.authStateChanges().map((User? user) {
-      if (user == null) {
-        debug('User is not signed in', origin: _origin);
-      } else {
-        debug('User ${user.uid} signed in to auth', origin: _origin);
-      }
-      return user?.uid;
+    // attach our _authUid stream to mock FirebaseAuth's uid stream
+    _authUid = _mockFirebaseAuthStream().map((String? userUid) {
+      return userUid;
     });
-
-    await _auth.signInAnonymously();
   }
 }
