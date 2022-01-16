@@ -10,13 +10,22 @@ void main() {
   final userService = MockUserService();
 
   final userController = UserController(userService, authService);
-  group('UserController.initialize should', () {
-    test('initializes AuthService', () async {
-      userController.initialize();
-      // wait for the mock stream to complete
-      await Future.delayed(Duration(milliseconds: 10));
+  group('UserController should', () {
+    test('initialize AuthService', () async {
+      await userController.initialize();
+      // TODO maybe we can do better than using timed delays
+      await Future.delayed(const Duration(milliseconds: 500));
+      expect(userController.userUid, 'firstUserUid');
+    });
 
-      expect(userController.userUid, 'userUid1');
+    test('handle new uid from AuthService', () async {
+      // TODO maybe we can do better than using timed delays
+      await Future.delayed(const Duration(seconds: 1));
+      expect(userController.userUid, 'mockUserUid');
+    });
+
+    test('initialize UserService', () async {
+      expect(userController.displayName, 'mockUserName');
     });
   });
 }

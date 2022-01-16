@@ -6,12 +6,12 @@ import 'package:skelly/src/user/user_service.dart';
 Map<String, Map<String, dynamic>> _mockUsersCollection = {
   'userUid1': {
     'displayName': 'someName',
-    'subscribedThreads': {'threadId1', 'threadId2'},
+    'subscribedThreads': {'threadId1'},
     'authoredThreads': {'threadId2'},
   },
   'userUid2': {
     'displayName': 'someOtherName',
-    'subscribedThreads': {'threadId2'},
+    'subscribedThreads': {'threadId1'},
     'authoredThreads': {},
   }
 };
@@ -40,9 +40,9 @@ class MockUserService implements UserService {
       debug('Adding user $userUid to users collection', origin: _origin);
 
       return <String, dynamic>{
-        'displayName': 'Mario',
-        'subscribedThreads': {'threadId1'},
-        'authoredThreads': {'threadId1'},
+        'displayName': 'mockUserName',
+        'subscribedThreads': {'threadId2'},
+        'authoredThreads': {'threadId2'},
       };
     });
 
@@ -53,7 +53,7 @@ class MockUserService implements UserService {
   static Stream<String?> _userDisplayName() async* {
     String _cached = '';
     while (true) {
-      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
+      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(1)));
       var _new = _mockUsersCollection[_thisUserUid]!['displayName'] as String;
       if (_new != _cached) {
         _cached = _new;
@@ -66,7 +66,7 @@ class MockUserService implements UserService {
   static Stream<Set<String>> _subscribedThreads() async* {
     Set<String> _cached = {};
     while (true) {
-      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
+      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(1)));
       var _new = _mockUsersCollection[_thisUserUid]!['subscribedThreads']
           as Set<String>;
       if (_new.difference(_cached).isNotEmpty ||
@@ -83,7 +83,7 @@ class MockUserService implements UserService {
   static Stream<Set<String>> _authoredThreads() async* {
     while (true) {
       Set<String> _cached = {};
-      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
+      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(1)));
       var _new =
           _mockUsersCollection[_thisUserUid]!['authoredThreads'] as Set<String>;
       if (_new.difference(_cached).isNotEmpty ||

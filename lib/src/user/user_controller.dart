@@ -36,7 +36,7 @@ class UserController with ChangeNotifier {
         notifyListeners();
 
         // Now we're ready to (re)initialize the UserService
-        await _userService.initialize(userUid: _userUid!);
+        _userService.initialize(userUid: _userUid!);
       }
     });
 
@@ -45,7 +45,7 @@ class UserController with ChangeNotifier {
 
     // And attach a listener to the user's displayName
     _userService.userDisplayName.listen((newName) {
-      debug('Received new userUid $newName', origin: origin);
+      debug('Received new displayName $newName', origin: origin);
       if (newName != null) {
         _displayName = newName;
         notifyListeners();
