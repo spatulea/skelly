@@ -5,9 +5,8 @@ import 'package:skelly/src/debug/debug.dart';
 import 'package:skelly/src/message/message.dart';
 import 'package:skelly/src/message/thread_service.dart';
 
-// For now, let's pretend the data is static and not a stream subscription
-// as the future firestore implementation is likely to be. So we can mock
-// the firestore database as a JSON containing threads that contain messages
+// Mock of the firestore database as a JSON containing threads that contain
+// messages
 Map<String, Map<String, dynamic>> _mockThreadData = {
   'threadId1': {
     'messageUid1': {

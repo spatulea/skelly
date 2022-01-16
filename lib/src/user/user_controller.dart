@@ -18,35 +18,37 @@ class UserController with ChangeNotifier {
   UserController(this._userService, this._authService);
 
   Future<void> initialize() async {
-    const String _origin = _className + '.initialize';
+    const String origin = _className + '.initialize';
 
     await _authService.initialize();
 
+    Stream<String?> authUidBroadcast = _authService.authUid.asBroadcastStream();
+
     // wait for a uid to be available
-    _userUid =
-        await _authService.authUid.firstWhere((authUid) => authUid != null);
-    // and initialize the UserService
-    await _userService.initialize(userUid: _userUid!);
+    _userUid = await authUidBroadcast.firstWhere((authUid) => authUid != null);
 
-    // And attach a listener to the user's displayName
-    _userService.userDisplayName.listen((newName) {
-      debug('Received new userUid $newName', origin: _origin);
-      if (newName != null) {
-        _displayName = newName;
-        notifyListeners();
-      }
-    });
-
-    // also attach a listener to update the app's userUid if the authUid
+    // attach a listener to update the app's userUid if the authUid
     // ever changes
-    _authService.authUid.listen((newUid) async {
-      debug('Received new userUid $newUid', origin: _origin);
+    authUidBroadcast.listen((newUid) async {
+      debug('Received new userUid $newUid', origin: origin);
       if (newUid != null) {
         _userUid = newUid;
         notifyListeners();
 
         // Now we're ready to (re)initialize the UserService
         await _userService.initialize(userUid: _userUid!);
+      }
+    });
+
+    // and initialize the UserService
+    await _userService.initialize(userUid: _userUid!);
+
+    // And attach a listener to the user's displayName
+    _userService.userDisplayName.listen((newName) {
+      debug('Received new userUid $newName', origin: origin);
+      if (newName != null) {
+        _displayName = newName;
+        notifyListeners();
       }
     });
   }

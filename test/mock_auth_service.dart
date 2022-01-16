@@ -5,7 +5,7 @@ class MockAuthService implements AuthService {
     List<String?> mockUids = [null, 'userUid1'];
 
     for (String? uid in mockUids) {
-      await Future<void>.delayed(const Duration(milliseconds: 10));
+      await Future<void>.delayed(const Duration(milliseconds: 1));
       yield uid;
     }
   }

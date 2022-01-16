@@ -1,12 +1,11 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:skelly/src/debug/debug.dart';
-import 'message.dart';
 
+import 'message.dart';
 import 'thread_service.dart';
 import '../user/user_service.dart';
+import '../debug/debug.dart';
 
 class ThreadController with ChangeNotifier {
   ThreadController(this._userService, this._threadService);
