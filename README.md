@@ -12,7 +12,8 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
     - Maintain good code organization with widgets, methods and files to avoid spaghetti architecture as much as possible
   - Create a unique UI experience that is differentiated from either Material or Cupertino styles
   - Use Firebase for authentication and database, but with minimal backend development
-    - Firestore for user preferences and threads
+    - Firestore for user preferences
+    - Realtime DB for threads & messages
     - Auth for anonymous-only user authentication
     - Use Firestore security rules to manage access control and data validation (no cloud functions)
   - Submit (and be accepted by) both app stores
@@ -24,7 +25,7 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
   - Firebase resources are organized as follows:
     - Authentication
       - Anonymous
-    - Firestore Collections
+    - Realtime Database
       - threads
         - threadUid
           - messageUid
@@ -37,6 +38,7 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
         - threadUid
           - ...
         - ...
+    - Firestore Collections
       - users
         - userUid
           - displayName
