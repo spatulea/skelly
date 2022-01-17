@@ -1,106 +1,69 @@
 import 'dart:math';
 
-import 'package:skelly/src/debug/debug.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-Map<String, Map<String, dynamic>> _mockUsersCollection = {
-  'userUid1': {
-    'displayName': 'someName',
-    'subscribedThreads': {'threadId1', 'threadId2'},
-    'authoredThreads': {'threadId2'},
-  },
-  'userUid2': {
-    'displayName': 'someOtherName',
-    'subscribedThreads': {'threadId2'},
-    'authoredThreads': {},
-  }
-};
+import 'package:skelly/src/debug/debug.dart';
 
 class UserService {
   static const _className = 'UserService';
 
-  Stream<String?> get userDisplayName => _userDisplayName();
-  Stream<Set<String>> get subscribedThreads => _subscribedThreads();
-  Stream<Set<String>> get authoredThreads => _authoredThreads();
-
   static late String _thisUserUid;
+
+  static late FirebaseFirestore _firestore;
+  static late CollectionReference _usersCollection;
 
   String get currentUserUid => _thisUserUid;
 
   Future<void> initialize({required String userUid}) async {
-    const String _origin = _className + '.initialize';
+    const String origin = _className + '.subscribe';
 
-    // Make sure the user's uid is in the collection, or create a new one!
-    _mockUsersCollection.putIfAbsent(userUid, () {
-      debug('Adding user $userUid to users collection', origin: _origin);
+    _firestore = FirebaseFirestore.instance;
+    _usersCollection = _firestore.collection('users');
 
-      return <String, dynamic>{
+    // Try to update the user document if it exists, create a new one if it
+    // does not.
+    try {
+      _usersCollection
+          .doc(userUid)
+          .update({'lastUpdateTime': FieldValue.serverTimestamp()});
+    } catch (e) {
+      _usersCollection.doc(userUid).set({
         'displayName': 'Mario',
         'subscribedThreads': {'threadId1'},
         'authoredThreads': {'threadId1'},
-      };
-    });
-
+        'lastUpdateTime': FieldValue.serverTimestamp(),
+      }).onError((error, stackTrace) => debug(
+          'Error $error unable to create user $userUid in users collection. Trace: $stackTrace',
+          origin: origin));
+    }
     _thisUserUid = userUid;
   }
 
-  // Mock an infinite stream of user's display name, only yielding on changes
-  static Stream<String?> _userDisplayName() async* {
-    String _cached = '';
-    while (true) {
-      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
-      var _new = _mockUsersCollection[_thisUserUid]!['displayName'] as String;
-      if (_new != _cached) {
-        _cached = _new;
-        yield _new;
-      }
-    }
-  }
+  Stream<String?> get userDisplayName =>
+      _usersCollection.doc(_thisUserUid).snapshots().map(
+          (documentSnapshot) => documentSnapshot.get('displayName') as String?);
 
-  // Mock an infinite stream of subscribed threads, only yielding on changes
-  static Stream<Set<String>> _subscribedThreads() async* {
-    Set<String> _cached = {};
-    while (true) {
-      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
-      var _new = _mockUsersCollection[_thisUserUid]!['subscribedThreads']
-          as Set<String>;
-      if (_new.difference(_cached).isNotEmpty ||
-          _cached.difference(_new).isNotEmpty) {
-        debug('Yielding new subscribedThread set $_new',
-            origin: _className + '._subscribedThreads.stream');
-        _cached = Set<String>.from(_new);
-        yield _new;
-      }
-    }
-  }
+  Stream<Set<String>> get subscribedThreads =>
+      _usersCollection.doc(_thisUserUid).snapshots().map((documentSnapshot) =>
+          (documentSnapshot.get('subscribedThreads') as List<dynamic>)
+              .cast<String>()
+              .toSet());
 
-  // Mock an infinite stream of authored threads, only yielding on changes
-  static Stream<Set<String>> _authoredThreads() async* {
-    while (true) {
-      Set<String> _cached = {};
-      await Future<void>.delayed(Duration(milliseconds: Random().nextInt(100)));
-      var _new =
-          _mockUsersCollection[_thisUserUid]!['authoredThreads'] as Set<String>;
-      if (_new.difference(_cached).isNotEmpty ||
-          _cached.difference(_new).isNotEmpty) {
-        debug('Yielding new authoredThread set $_new',
-            origin: _className + '._subscribedThreads.stream');
-        _cached = Set<String>.from(_new);
-        yield _new;
-      }
-    }
-  }
+  Stream<Set<String>> get authoredThreads =>
+      _usersCollection.doc(_thisUserUid).snapshots().map((documentSnapshot) =>
+          (documentSnapshot.get('authoredThreads') as List<dynamic>)
+              .cast<String>()
+              .toSet());
 
   Future<void> subscribeToThread(String threadUid) async {
-    var subscribedThreads =
-        _mockUsersCollection[_thisUserUid]!['subscribedThreads'] as Set<String>;
-
-    subscribedThreads.add(threadUid);
+    _usersCollection.doc(_thisUserUid).update({
+      'subscribedThreads': FieldValue.arrayUnion([threadUid])
+    });
   }
 
   Future<void> unsubscribeFromThread(String threadUid) async {
-    var subscribedThreads =
-        _mockUsersCollection[_thisUserUid]!['subscribedThreads'] as Set<String>;
-
-    subscribedThreads.remove(threadUid);
+    _usersCollection.doc(_thisUserUid).update({
+      'subscribedThreads': FieldValue.arrayRemove([threadUid])
+    });
   }
 }
