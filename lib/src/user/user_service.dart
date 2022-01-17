@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:skelly/src/debug/debug.dart';
@@ -23,14 +21,17 @@ class UserService {
     // Try to update the user document if it exists, create a new one if it
     // does not.
     try {
-      _usersCollection
+      await _usersCollection
           .doc(userUid)
           .update({'lastUpdateTime': FieldValue.serverTimestamp()});
     } catch (e) {
-      _usersCollection.doc(userUid).set({
+      debug(
+          'User $userUid does not exist in collection, creating new user document',
+          origin: origin);
+      await _usersCollection.doc(userUid).set({
         'displayName': 'Mario',
-        'subscribedThreads': {'threadId1'},
-        'authoredThreads': {'threadId1'},
+        'subscribedThreads': ['threadUid1'],
+        'authoredThreads': [],
         'lastUpdateTime': FieldValue.serverTimestamp(),
       }).onError((error, stackTrace) => debug(
           'Error $error unable to create user $userUid in users collection. Trace: $stackTrace',

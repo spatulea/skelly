@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:skelly/src/message/message.dart';
 
@@ -132,7 +131,7 @@ class _InputBubbleState extends State<InputBubble> {
                                         author:
                                             widget.userController.displayName!,
                                         userUid: widget.userController.userUid!,
-                                        isTest: true);
+                                        isTest: false);
                                     if (isLastIndex) {
                                       widget.threadController
                                           .createThread(message);

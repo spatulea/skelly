@@ -30,8 +30,8 @@ class UserController with ChangeNotifier {
     // attach a listener to update the app's userUid if the authUid
     // ever changes
     authUidBroadcast.listen((newUid) async {
-      debug('Received new userUid $newUid', origin: origin);
-      if (newUid != null) {
+      if (newUid != null && newUid != _userUid) {
+        debug('Received new userUid $newUid', origin: origin);
         _userUid = newUid;
         notifyListeners();
 
@@ -45,8 +45,8 @@ class UserController with ChangeNotifier {
 
     // And attach a listener to the user's displayName
     _userService.userDisplayName.listen((newName) {
-      debug('Received new displayName $newName', origin: origin);
-      if (newName != null) {
+      if (newName != null && newName != _displayName) {
+        debug('Received new displayName $newName', origin: origin);
         _displayName = newName;
         notifyListeners();
       }

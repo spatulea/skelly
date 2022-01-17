@@ -22,6 +22,10 @@ class ThreadController with ChangeNotifier {
   // Return thread map as list that can be iterated by the UI
   List<Thread> get threads => _threads.values.toList();
 
+  void initialize() {
+    _threadService.initialize();
+  }
+
   void subscribeThreads() {
     const String _origin = _className + '.subscribeThreads';
 
@@ -39,11 +43,13 @@ class ThreadController with ChangeNotifier {
         _threadSubscriptions.putIfAbsent(
             threadUid,
             () => _threadService.messageStream(threadUid).listen((newMessage) {
-                  // Add new messages to the thread and notify the UI
-                  _threads[threadUid]!
-                      .messages
-                      .putIfAbsent(newMessage.uid!, () => newMessage);
-                  notifyListeners();
+                  if (newMessage != null) {
+                    // Add new messages to the thread and notify the UI
+                    _threads[threadUid]!
+                        .messages
+                        .putIfAbsent(newMessage.uid!, () => newMessage);
+                    notifyListeners();
+                  }
                 }));
         // Add the new threads to listener cache
         cachedSubscribedThreads.add(threadUid);

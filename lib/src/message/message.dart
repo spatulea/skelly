@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart'
-    show Timestamp, FieldValue;
+import 'package:cloud_firestore/cloud_firestore.dart' show Timestamp;
+import 'package:firebase_database/firebase_database.dart' show ServerValue;
 
 class Thread {
   Thread(this.messages, {required this.uid});
@@ -29,7 +29,7 @@ class Message {
       : text = json['text'] as String,
         author = json['author'] as String,
         userUid = json['userUid'] as String,
-        timeStamp = json['timeStamp'] as Timestamp,
+        timeStamp = Timestamp.fromMillisecondsSinceEpoch(json['timeStamp']),
         isNew = true,
         isTest = false;
 
@@ -39,7 +39,8 @@ class Message {
         'author': author,
         'userUid': userUid,
         // if testing use given timestamp not remote
-        'timeStamp': isTest ? (timeStamp ?? 0) : FieldValue.serverTimestamp(),
+        'timeStamp':
+            isTest ? (timeStamp ?? 1642398059739) : ServerValue.timestamp,
       };
 
   // Enable object comparison (ignoring isTest)

@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:skelly/src/message/input_bubble.dart';
 import 'package:skelly/src/message/round_button.dart';
@@ -77,6 +76,7 @@ class MessageThread extends StatelessWidget {
                     ),
                   ],
                 ),
+                // TODO find better way than reversing while widget list
               ].reversed.toList(),
             ));
   }
