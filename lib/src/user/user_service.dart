@@ -24,18 +24,27 @@ class UserService {
       await _usersCollection
           .doc(userUid)
           .update({'lastUpdateTime': FieldValue.serverTimestamp()});
+    } on FirebaseException catch (e) {
+      if (e.code == 'not-found') {
+        debug(
+            'User $userUid does not exist in collection, creating new user document',
+            origin: origin);
+        await _usersCollection.doc(userUid).set({
+          'displayName': 'Mario',
+          'subscribedThreads': ['threadUid1'],
+          'authoredThreads': [],
+          'lastUpdateTime': FieldValue.serverTimestamp(),
+        }).onError((error, stackTrace) => debug(
+            'Error $error unable to create user $userUid in users collection. Trace: $stackTrace',
+            origin: origin));
+      } else {
+        debug(
+            'Error $e while trying to locate user $userUid in users collection',
+            origin: origin);
+      }
     } catch (e) {
-      debug(
-          'User $userUid does not exist in collection, creating new user document',
+      debug('Error $e while trying to locate user $userUid in users collection',
           origin: origin);
-      await _usersCollection.doc(userUid).set({
-        'displayName': 'Mario',
-        'subscribedThreads': ['threadUid1'],
-        'authoredThreads': [],
-        'lastUpdateTime': FieldValue.serverTimestamp(),
-      }).onError((error, stackTrace) => debug(
-          'Error $error unable to create user $userUid in users collection. Trace: $stackTrace',
-          origin: origin));
     }
     _thisUserUid = userUid;
   }

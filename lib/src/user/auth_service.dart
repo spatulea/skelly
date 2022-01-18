@@ -17,7 +17,7 @@ class AuthService {
     _auth = FirebaseAuth.instance;
 
     // attach our _authUid stream to FirebaseAuth's authState stream
-    // picking out the userUid for _authUid
+    // picking out the userUid
     _authUid = _auth.authStateChanges().map((User? user) {
       if (user == null) {
         debug('User is not signed in', origin: _origin);
