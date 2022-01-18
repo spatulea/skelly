@@ -8,7 +8,7 @@ void main() {
     'text': 'testText',
     'author': 'testAuthor',
     'userUid': 'testUserUid',
-    'timeStamp': Timestamp.fromMicrosecondsSinceEpoch(1641358386000000),
+    'timeStamp': 1642398059739,
   };
   group('Message should', () {
     // test('create from constructor', () {});
@@ -18,7 +18,7 @@ void main() {
         text: 'testText',
         author: 'testAuthor',
         userUid: 'testUserUid',
-        timeStamp: Timestamp.fromMicrosecondsSinceEpoch(1641358386000000),
+        timeStamp: Timestamp.fromMillisecondsSinceEpoch(1642398059739),
         isNew: true,
         isTest: false,
       );
@@ -29,7 +29,7 @@ void main() {
         text: 'testText',
         author: 'testAuthor',
         userUid: 'testUserUid',
-        timeStamp: Timestamp.fromMicrosecondsSinceEpoch(1641358386000000),
+        timeStamp: Timestamp.fromMillisecondsSinceEpoch(1642398059739),
         isNew: true,
         isTest: true,
       );

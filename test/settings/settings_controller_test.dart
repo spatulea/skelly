@@ -1,16 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:skelly/src/app.dart';
 import 'package:skelly/src/message/thread_controller.dart';
-import 'package:skelly/src/message/thread_service.dart';
 import 'package:skelly/src/settings/settings_controller.dart';
-import 'package:skelly/src/settings/settings_service.dart';
 import 'package:flutter/material.dart';
-import 'package:skelly/src/user/auth_service.dart';
 import 'package:skelly/src/user/user_controller.dart';
-import 'package:skelly/src/user/user_service.dart';
 
+import '../mock_auth_service.dart';
 import '../mock_settings_service.dart';
 import '../mock_thread_service.dart';
+import '../mock_user_service.dart';
 
 void main() {
   group('ServiceController.updateThemeMode should', () {
@@ -33,13 +31,15 @@ void main() {
       final settingsService = MockSettingsService();
       final settingsController = SettingsController(settingsService);
 
-      final authService = AuthService();
-      final userService = UserService();
-      final threadService = ThreadService();
+      final authService = MockAuthService();
+      final userService = MockUserService();
+      final threadService = MockThreadService();
 
       final threadController = ThreadController(userService, threadService);
       final userController = UserController(userService, authService);
 
+      await userController.initialize();
+      threadController.initialize();
       threadController.subscribeThreads();
       await settingsController.loadSettings();
 

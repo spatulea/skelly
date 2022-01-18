@@ -67,6 +67,9 @@ class MockThreadService implements ThreadService {
   }
 
   @override
+  void initialize() {}
+
+  @override
   Stream<Message> messageStream(String threadUid) async* {
     // cancel the stream if the threadUid doesn't exist
     if (!_mockThreadData.containsKey(threadUid)) return;

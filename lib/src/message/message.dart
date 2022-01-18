@@ -29,7 +29,8 @@ class Message {
       : text = json['text'] as String,
         author = json['author'] as String,
         userUid = json['userUid'] as String,
-        timeStamp = Timestamp.fromMillisecondsSinceEpoch(json['timeStamp']),
+        timeStamp =
+            Timestamp.fromMillisecondsSinceEpoch(json['timeStamp'] as int),
         isNew = true,
         isTest = false;
 
@@ -39,8 +40,9 @@ class Message {
         'author': author,
         'userUid': userUid,
         // if testing use given timestamp not remote
-        'timeStamp':
-            isTest ? (timeStamp ?? 1642398059739) : ServerValue.timestamp,
+        'timeStamp': isTest
+            ? (timeStamp?.millisecondsSinceEpoch ?? 1642398059739)
+            : ServerValue.timestamp,
       };
 
   // Enable object comparison (ignoring isTest)
