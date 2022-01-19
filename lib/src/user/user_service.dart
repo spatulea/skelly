@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:skelly/src/debug/debug.dart';
+import 'generate_name.dart';
 
 class UserService {
   static const _className = 'UserService';
@@ -30,7 +31,7 @@ class UserService {
             'User $userUid does not exist in collection, creating new user document',
             origin: origin);
         await _usersCollection.doc(userUid).set({
-          'displayName': 'Mario',
+          'displayName': await GenerateName.name,
           'subscribedThreads': ['threadUid1'],
           'authoredThreads': [],
           'lastUpdateTime': FieldValue.serverTimestamp(),
