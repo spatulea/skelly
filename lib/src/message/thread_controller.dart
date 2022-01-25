@@ -86,6 +86,11 @@ class ThreadController with ChangeNotifier {
     _userService.subscribeToThread(newThreadUid);
   }
 
+  // TODO condition exists where threadUid is invalid in threads collection
+  Future<void> subscribeToThread(String threadUid) async {
+    _userService.subscribeToThread(threadUid);
+  }
+
   Future<void> unsubscribeThread(Thread thread) async {
     _userService.unsubscribeFromThread(thread.uid);
   }

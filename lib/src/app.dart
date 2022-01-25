@@ -79,6 +79,16 @@ class MyApp extends StatelessWidget {
                     return const SampleItemDetailsView();
                   case ThreadListView.routeName:
                   default:
+                    print(routeSettings.name);
+                    // Check if route / deep link has threadUid present
+                    if (routeSettings.name?.contains('/?threadUid') ?? false) {
+                      var uri = Uri.parse(routeSettings.name!);
+                      String? threadUid = uri.queryParameters['threadUid'];
+                      if ((threadUid ?? '') != '') {
+                        // Add passed threadUid to user's subscriptions
+                        threadController.subscribeToThread(threadUid!);
+                      }
+                    }
                     return ThreadListView(
                       threadController: threadController,
                       userController: userController,
@@ -87,6 +97,10 @@ class MyApp extends StatelessWidget {
               },
             );
           },
+          // home: ThreadListView(
+          //   threadController: threadController,
+          //   userController: userController,
+          // ),
         );
       },
     );
