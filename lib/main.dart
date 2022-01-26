@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:skelly/src/debug/debug.dart';
 import 'package:skelly/src/user/auth_service.dart';
+import 'package:uni_links/uni_links.dart';
 // import 'package:uni_links/uni_links.dart';
 
 import 'src/app.dart';
@@ -34,35 +35,34 @@ void main() async {
   // This prevents a sudden theme change when the app is first displayed.
   await settingsController.loadSettings();
 
-  // // Check for link passed at app start-up
-  // try {
-  //   final Uri? uri = await getInitialUri();
-  //   print('Got unilink uri $uri');
-  //   if (uri != null) {
-  //     String? threadUid = uri.queryParameters['threadUid'];
-  //     if (threadUid != null) {
-  //       // Add passed threadUid to user's subscriptions
-  //       threadController.subscribeToThread(threadUid);
-  //     }
-  //   }
-  // } catch (e) {
-  //   debug('Error $e failed to parse initial URI', origin: origin);
-  // }
+  // Check for link passed at app start-up
+  try {
+    final Uri? uri = await getInitialUri();
+    debug('Got unilink uri $uri', origin: origin);
+    if (uri != null) {
+      String? threadUid = uri.queryParameters['threadUid'];
+      if (threadUid != null) {
+        // Add passed threadUid to user's subscriptions
+        threadController.subscribeToThread(threadUid);
+      }
+    }
+  } catch (e) {
+    debug('Error $e failed to parse initial URI', origin: origin);
+  }
 
-  // // Attach listener to new links
-  // uriLinkStream.listen((Uri? uri) {
-  //   print('Got late link uri $uri');
-  //   print(uri!.queryParametersAll);
-  //   if (uri != null) {
-  //     String? threadUid = uri.queryParameters['threadUid'];
-  //     if (threadUid != null) {
-  //       // Add passed threadUid to user's subscriptions
-  //       threadController.subscribeToThread(threadUid);
-  //     }
-  //   }
-  // }, onError: (error, stackTrace) {
-  //   debug('Error processing URI $error $stackTrace', origin: origin);
-  // });
+  // Attach listener to new links
+  uriLinkStream.listen((Uri? uri) {
+    debug('Got late link uri $uri', origin: origin);
+    if (uri != null) {
+      String? threadUid = uri.queryParameters['threadUid'];
+      if ((threadUid ?? '') != '') {
+        // Add passed threadUid to user's subscriptions
+        threadController.subscribeToThread(threadUid!);
+      }
+    }
+  }, onError: (error, stackTrace) {
+    debug('Error processing URI $error $stackTrace', origin: origin);
+  });
 
   debug('Service and Controller initialization complete', origin: origin);
 
