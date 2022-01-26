@@ -39,6 +39,8 @@ class _InputBubbleState extends State<InputBubble> {
   late final TextEditingController textController;
   late bool isLastIndex;
 
+  static const double _width = 30;
+
   @override
   void initState() {
     _bubbleState = BubbleState.plusButton;
@@ -77,10 +79,10 @@ class _InputBubbleState extends State<InputBubble> {
                     : const EdgeInsets.fromLTRB(10, 10, 10, 10),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(13),
+                  borderRadius: BorderRadius.circular(_width / 2),
                 ),
                 width: _isButtonState
-                    ? 30
+                    ? _width
                     : MediaQuery.of(context).size.width - 150,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -165,7 +167,6 @@ class _InputBubbleState extends State<InputBubble> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     textController.dispose();
     super.dispose();
   }

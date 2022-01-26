@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:skelly/src/message/input_bubble.dart';
-import 'package:skelly/src/message/round_button.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 import 'package:skelly/src/user/user_controller.dart';
 
 import 'message.dart';
 import 'message_bubble.dart';
+import 'unsub_bubble.dart';
 
 class MessageThread extends StatelessWidget {
   const MessageThread(
@@ -56,19 +56,10 @@ class MessageThread extends StatelessWidget {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(13),
-                        ),
-                        padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-                        margin: const EdgeInsets.fromLTRB(10, 2, 5, 2),
-                        child: RoundButton(
-                          iconData: Icons.remove,
-                          color: Colors.red.shade300,
-                          onSubmit: () =>
-                              threadController.unsubscribeThread(thread!),
-                        )),
+                    UnsubBubble(
+                        height: 30,
+                        threadController: threadController,
+                        thread: thread),
                     InputBubble(
                       userController: userController,
                       threadController: threadController,
