@@ -4,7 +4,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 import 'package:skelly/src/user/user_controller.dart';
 
-import 'sample_feature/sample_item_details_view.dart';
 import 'message/thread_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
@@ -75,8 +74,6 @@ class MyApp extends StatelessWidget {
                 switch (routeSettings.name) {
                   case SettingsView.routeName:
                     return SettingsView(controller: settingsController);
-                  case SampleItemDetailsView.routeName:
-                    return const SampleItemDetailsView();
                   case ThreadListView.routeName:
                   default:
                     return ThreadListView(
