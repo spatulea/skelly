@@ -15,6 +15,7 @@ enum BubbleState {
 class InputBubble extends StatefulWidget {
   const InputBubble(
       {Key? key,
+      this.buttonSize = 26,
       required this.userController,
       required this.threadController,
       required this.threadIndex})
@@ -23,6 +24,7 @@ class InputBubble extends StatefulWidget {
   final UserController userController;
   final ThreadController threadController;
   final int threadIndex;
+  final double buttonSize;
 
   @override
   State<InputBubble> createState() => _InputBubbleState();
@@ -38,8 +40,6 @@ class _InputBubbleState extends State<InputBubble> {
       _bubbleState == BubbleState.animatingToTextField;
   late final TextEditingController textController;
   late bool isLastIndex;
-
-  static const double _width = 30;
 
   @override
   void initState() {
@@ -74,22 +74,21 @@ class _InputBubbleState extends State<InputBubble> {
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeInOut,
                 padding: _isButtonState
-                    ? const EdgeInsets.fromLTRB(2, 2, 2, 2)
+                    ? const EdgeInsets.all(0)
                     : const EdgeInsets.fromLTRB(10, 10, 10, 10),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(_width / 2),
+                  borderRadius: BorderRadius.circular(widget.buttonSize / 2),
                 ),
                 width: _isButtonState
-                    ? _width
+                    ? widget.buttonSize
                     : MediaQuery.of(context).size.width - 150,
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     RoundButton(
                         iconData: _isButtonState ? Icons.add : Icons.cancel,
-                        height: 26,
-                        width: 26,
+                        size: 26,
                         onSubmit: () => setState(() {
                               if (_isTextState) {
                                 textController.clear();
@@ -124,8 +123,7 @@ class _InputBubbleState extends State<InputBubble> {
                       child: _bubbleState == BubbleState.textField
                           ? RoundButton(
                               iconData: Icons.arrow_upward,
-                              height: 26,
-                              width: 26,
+                              size: 26,
                               onSubmit: () => setState(() {
                                     final Message message = Message(
                                         text: textController.text,

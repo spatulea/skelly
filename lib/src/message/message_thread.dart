@@ -64,23 +64,33 @@ class MessageThread extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                              height: 30,
-                              width: 30,
-                              padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
+                              // height: 30,
+                              // width: 30,
+                              // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
                               decoration: BoxDecoration(
                                 color: Colors.grey.shade300,
                                 borderRadius: BorderRadius.circular(30 / 2),
                               ),
                               child: RoundButton(
-                                iconData: Icons.arrow_upward,
+                                size: 26,
+                                iconSize: 18,
+                                iconData: Icons.ios_share_rounded,
                                 onSubmit: () => Share.share(
                                     'Check out a new strfsh thread: strfshapp://strfsh.app/?threadUid=${thread!.uid}'),
                               )),
+                          Container(
+                            height: 4,
+                            width: 4,
+                          ),
                           UnsubBubble(
-                              height: 30,
+                              size: 26,
                               threadController: threadController,
                               thread: thread),
                         ],
+                      ),
+                      Container(
+                        height: 4,
+                        width: 4,
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
