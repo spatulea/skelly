@@ -16,15 +16,17 @@ class InputBubble extends StatefulWidget {
   const InputBubble(
       {Key? key,
       this.buttonSize = 26,
+      this.margin = 2,
       required this.userController,
       required this.threadController,
-      required this.threadIndex})
+      this.thread})
       : super(key: key);
 
   final UserController userController;
   final ThreadController threadController;
-  final int threadIndex;
+  final Thread? thread;
   final double buttonSize;
+  final double margin;
 
   @override
   State<InputBubble> createState() => _InputBubbleState();
@@ -39,7 +41,6 @@ class _InputBubbleState extends State<InputBubble> {
       _bubbleState == BubbleState.textField ||
       _bubbleState == BubbleState.animatingToTextField;
   late final TextEditingController textController;
-  late bool isLastIndex;
 
   @override
   void initState() {
@@ -51,111 +52,87 @@ class _InputBubbleState extends State<InputBubble> {
 
   @override
   Widget build(BuildContext context) {
-    // If the build index is greater than the number of threads then we're
-    // drawing the "new thread" input bubble
-    isLastIndex = widget.threadIndex >= widget.threadController.threads.length;
-
-    return Column(
-      children: [
-        Row(
-          children: [
-            AnimatedContainer(
-                onEnd: () {
-                  setState(() {
-                    if (_bubbleState == BubbleState.animatingToPlusButton) {
-                      _bubbleState = BubbleState.plusButton;
-                    } else if (_bubbleState ==
-                        BubbleState.animatingToTextField) {
-                      _bubbleState = BubbleState.textField;
-                    }
-                  });
-                },
-                clipBehavior: Clip.hardEdge,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeInOut,
-                padding: _isButtonState
-                    ? const EdgeInsets.all(0)
-                    : const EdgeInsets.fromLTRB(10, 10, 10, 10),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(widget.buttonSize / 2),
-                ),
-                width: _isButtonState
-                    ? widget.buttonSize
-                    : MediaQuery.of(context).size.width - 150,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    RoundButton(
-                        iconData: _isButtonState ? Icons.add : Icons.cancel,
-                        size: 26,
-                        onSubmit: () => setState(() {
-                              if (_isTextState) {
-                                textController.clear();
-                                _bubbleState =
-                                    BubbleState.animatingToPlusButton;
-                              } else {
-                                _bubbleState = BubbleState.animatingToTextField;
-                              }
-                            })),
-                    Expanded(
-                      child: _isTextState
-                          ? TextField(
-                              controller: textController,
-                              textAlignVertical: TextAlignVertical.bottom,
-                              decoration: const InputDecoration(
-                                  counterText: '',
-                                  contentPadding: EdgeInsets.all(4),
-                                  border: InputBorder.none,
-                                  isDense: true),
-                              minLines: 1,
-                              maxLines: 8,
-                              maxLength: 200,
-                              autofocus: true,
-                            )
-                          : Container(),
-                    ),
-                    AnimatedOpacity(
-                      curve: Curves.easeInOut,
-                      opacity:
-                          _bubbleState == BubbleState.textField ? 1.0 : 0.0,
-                      duration: const Duration(milliseconds: 200),
-                      child: _bubbleState == BubbleState.textField
-                          ? RoundButton(
-                              iconData: Icons.arrow_upward,
-                              size: 26,
-                              onSubmit: () => setState(() {
-                                    final Message message = Message(
-                                        text: textController.text,
-                                        author:
-                                            widget.userController.displayName!,
-                                        userUid: widget.userController.userUid!,
-                                        isTest: false);
-                                    if (isLastIndex) {
-                                      widget.threadController
-                                          .createThread(message);
-                                    } else {
-                                      final String threadUid = widget
-                                          .threadController
-                                          .threads[widget.threadIndex]
-                                          .uid;
-
-                                      widget.threadController
-                                          .putToThread(threadUid, message);
-                                    }
-                                    textController.clear();
-                                    _bubbleState =
-                                        BubbleState.animatingToPlusButton;
-                                  }))
-                          : Container(),
-                    ),
-                  ],
-                )),
-          ],
+    return AnimatedContainer(
+        margin: EdgeInsets.all(widget.margin),
+        onEnd: () {
+          setState(() {
+            if (_bubbleState == BubbleState.animatingToPlusButton) {
+              _bubbleState = BubbleState.plusButton;
+            } else if (_bubbleState == BubbleState.animatingToTextField) {
+              _bubbleState = BubbleState.textField;
+            }
+          });
+        },
+        clipBehavior: Clip.hardEdge,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+        padding: _isButtonState
+            ? const EdgeInsets.all(0)
+            : const EdgeInsets.fromLTRB(10, 10, 10, 10),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade300,
+          borderRadius: BorderRadius.circular(widget.buttonSize / 2),
         ),
-        // Empty text container to match height to message bubble author label
-      ],
-    );
+        width: _isButtonState
+            ? widget.buttonSize
+            : MediaQuery.of(context).size.width - 150,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            RoundButton(
+                iconData: _isButtonState ? Icons.add : Icons.cancel,
+                size: 26,
+                onSubmit: () => setState(() {
+                      if (_isTextState) {
+                        textController.clear();
+                        _bubbleState = BubbleState.animatingToPlusButton;
+                      } else {
+                        _bubbleState = BubbleState.animatingToTextField;
+                      }
+                    })),
+            Expanded(
+              child: _isTextState
+                  ? TextField(
+                      controller: textController,
+                      textAlignVertical: TextAlignVertical.bottom,
+                      decoration: const InputDecoration(
+                          counterText: '',
+                          contentPadding: EdgeInsets.all(4),
+                          border: InputBorder.none,
+                          isDense: true),
+                      minLines: 1,
+                      maxLines: 8,
+                      maxLength: 200,
+                      autofocus: true,
+                    )
+                  : Container(),
+            ),
+            AnimatedOpacity(
+              curve: Curves.easeInOut,
+              opacity: _bubbleState == BubbleState.textField ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 200),
+              child: _bubbleState == BubbleState.textField
+                  ? RoundButton(
+                      iconData: Icons.arrow_upward,
+                      size: 26,
+                      onSubmit: () => setState(() {
+                            final Message message = Message(
+                                text: textController.text,
+                                author: widget.userController.displayName!,
+                                userUid: widget.userController.userUid!,
+                                isTest: false);
+                            widget.thread == null
+                                ? widget.threadController.createThread(message)
+                                : widget.threadController
+                                    .putToThread(widget.thread!.uid, message);
+
+                            textController.clear();
+                            _bubbleState = BubbleState.animatingToPlusButton;
+                          }))
+                  : Container(),
+            ),
+          ],
+        ));
   }
 
   @override

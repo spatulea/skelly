@@ -3,6 +3,7 @@ import 'package:skelly/src/message/thread_controller.dart';
 import 'package:skelly/src/user/user_controller.dart';
 
 import '../settings/settings_view.dart';
+import 'input_bubble.dart';
 import 'message_thread.dart';
 
 /// Displays a list of SampleItems.
@@ -47,26 +48,30 @@ class ThreadListView extends StatelessWidget {
               shrinkWrap: false,
               itemCount: threadController.threads.length + 1,
               itemBuilder: (BuildContext context, int index) {
-                // return ListTile(
-                //     title: Text('SampleItem ${item.id}'),
-                //     leading: const CircleAvatar(
-                //       // Display the Flutter Logo image asset.
-                //       foregroundImage: AssetImage('assets/images/flutter_logo.png'),
-                //     ),
-                //     onTap: () {
-                //       // Navigate to the details page. If the user leaves and returns to
-                //       // the app after it has been killed while running in the
-                //       // background, the navigation stack is restored.
-                //       Navigator.restorablePushNamed(
-                //         context,
-                //         SampleItemDetailsView.routeName,
-                //       );
-                //     });
-                return MessageThread(
-                  userController: userController,
-                  threadController: threadController,
-                  threadIndex: index,
-                );
+                return index < threadController.threads.length
+                    // Build regular thread
+                    ? Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                        child: MessageThread(
+                          userController: userController,
+                          threadController: threadController,
+                          threadIndex: index,
+                        ),
+                      )
+                    // Or show the input bubble to create a new thread
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: InputBubble(
+                              threadController: threadController,
+                              userController: userController,
+                            ),
+                          ),
+                        ],
+                      );
               },
             ),
           );
