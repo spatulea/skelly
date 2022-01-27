@@ -21,9 +21,11 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   http: ^0.13.4
+  share_plus: ^3.0.4
   uni_links: ^0.5.1
 
 dev_dependencies:
+  flutter_native_splash: ^1.2.3
   flutter_test:
     sdk: flutter
 

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:skelly/src/message/input_bubble.dart';
+import 'package:skelly/src/message/round_button.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 import 'package:skelly/src/user/user_controller.dart';
 
@@ -53,19 +55,45 @@ class MessageThread extends StatelessWidget {
                 for (var message in thread!.messages.values)
                   MessageBubble(
                       message: message, userController: userController),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    UnsubBubble(
-                        height: 30,
-                        threadController: threadController,
-                        thread: thread),
-                    InputBubble(
-                      userController: userController,
-                      threadController: threadController,
-                      threadIndex: threadIndex,
-                    ),
-                  ],
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 2, 5, 2),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              height: 30,
+                              width: 30,
+                              padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(30 / 2),
+                              ),
+                              child: RoundButton(
+                                iconData: Icons.arrow_upward,
+                                onSubmit: () => Share.share(
+                                    'Check out a new strfsh thread: strfshapp://strfsh.app/?threadUid=${thread!.uid}'),
+                              )),
+                          UnsubBubble(
+                              height: 30,
+                              threadController: threadController,
+                              thread: thread),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InputBubble(
+                            userController: userController,
+                            threadController: threadController,
+                            threadIndex: threadIndex,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
                 // TODO find better way than reversing while widget list
               ].reversed.toList(),

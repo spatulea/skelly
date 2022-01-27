@@ -45,7 +45,6 @@ class _UnsubBubbleState extends State<UnsubBubble> {
         borderRadius: BorderRadius.circular(widget.height / 2),
       ),
       padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-      margin: const EdgeInsets.fromLTRB(10, 2, 5, 2),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

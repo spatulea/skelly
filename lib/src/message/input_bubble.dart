@@ -73,7 +73,6 @@ class _InputBubbleState extends State<InputBubble> {
                 clipBehavior: Clip.hardEdge,
                 duration: const Duration(milliseconds: 400),
                 curve: Curves.easeInOut,
-                margin: const EdgeInsets.fromLTRB(10, 2, 5, 2),
                 padding: _isButtonState
                     ? const EdgeInsets.fromLTRB(2, 2, 2, 2)
                     : const EdgeInsets.fromLTRB(10, 10, 10, 10),
@@ -157,10 +156,6 @@ class _InputBubbleState extends State<InputBubble> {
           ],
         ),
         // Empty text container to match height to message bubble author label
-        const Text(
-          '',
-          textAlign: TextAlign.end,
-        ),
       ],
     );
   }
