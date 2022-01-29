@@ -16,15 +16,18 @@ class MessageBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isAuthor = message.userUid == (userController.userUid ?? '');
     return Container(
-      padding: EdgeInsets.fromLTRB(5, 2, 5, 2),
+      margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+      padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
       width: flexWidth(message.text.length, message.author.length, context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Container(
-            padding: EdgeInsets.fromLTRB(10, 7, 10, 7),
+            padding: const EdgeInsets.fromLTRB(10, 7, 10, 7),
             decoration: BoxDecoration(
-              color: isAuthor ? Colors.blue.shade300 : Colors.grey.shade400,
+              color: isAuthor
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.secondary,
               borderRadius: BorderRadius.circular(13),
             ),
             child: message.text != ''
@@ -39,9 +42,6 @@ class MessageBubble extends StatelessWidget {
           Text(
             message.author,
             textAlign: TextAlign.end,
-            // style: author == fireState.myName
-            //     ? Styles.thisAuthorName
-            //     : Styles.otherAuthorName
           ),
         ],
       ),

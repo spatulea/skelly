@@ -22,10 +22,6 @@ class ShareBubble extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
         margin: EdgeInsets.all(margin),
-        decoration: BoxDecoration(
-          color: Colors.grey.shade300,
-          borderRadius: BorderRadius.circular(size / 2),
-        ),
         child: RoundButton(
           size: size,
           iconSize: iconSize,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:skelly/src/message/thread_controller.dart';
 import 'package:skelly/src/user/user_controller.dart';
 
-import '../settings/settings_view.dart';
 import 'input_bubble.dart';
 import 'message_thread.dart';
 
@@ -25,55 +24,62 @@ class ThreadListView extends StatelessWidget {
         animation: threadController,
         builder: (context, _) {
           return Scaffold(
-            appBar: AppBar(
-              title: const Text('Message Threads'),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  onPressed: () {
-                    // Navigate to the settings page. If the user leaves and returns
-                    // to the app after it has been killed while running in the
-                    // background, the navigation stack is restored.
-                    Navigator.restorablePushNamed(
-                        context, SettingsView.routeName);
-                  },
-                ),
-              ],
-            ),
-            body: ListView.builder(
-              // Providing a restorationId allows the ListView to restore the
-              // scroll position when a user leaves and returns to the app after it
-              // has been killed while running in the background.
-              restorationId: 'threadListView',
-              shrinkWrap: false,
-              itemCount: threadController.threads.length + 1,
-              itemBuilder: (BuildContext context, int index) {
-                return index < threadController.threads.length
-                    // Build regular thread
-                    ? Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                        child: MessageThread(
-                          userController: userController,
-                          threadController: threadController,
-                          threadIndex: index,
-                        ),
-                      )
-                    // Or show the input bubble to create a new thread
-                    : Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: InputBubble(
-                              threadController: threadController,
-                              userController: userController,
-                            ),
-                          ),
-                        ],
-                      );
-              },
-            ),
+            body: CustomScrollView(
+                // Providing a restorationId allows the ListView to restore the
+                // scroll position when a user leaves and returns to the app after it
+                // has been killed while running in the background.
+                restorationId: 'threadListView',
+                shrinkWrap: false,
+                slivers: <Widget>[
+                  SliverAppBar(
+                    pinned: true,
+                    // backgroundColor: Theme.of(context).backgroundColor,
+                    toolbarHeight: 0.0,
+                    collapsedHeight: 14.0,
+                    expandedHeight: 30.0,
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text(
+                        userController.displayName ?? '',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      titlePadding: const EdgeInsets.all(4),
+                    ),
+                  ),
+                  SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return index < threadController.threads.length
+                          // Build regular thread
+                          ? Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              child: MessageThread(
+                                userController: userController,
+                                threadController: threadController,
+                                threadIndex: index,
+                              ),
+                            )
+                          // Or show the input bubble to create a new thread
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: InputBubble(
+                                    threadController: threadController,
+                                    userController: userController,
+                                  ),
+                                ),
+                                MaterialButton(
+                                  onPressed: () {},
+                                  child: Text('button'),
+                                )
+                              ],
+                            );
+                    },
+                    childCount: threadController.threads.length + 1,
+                  ))
+                ]),
           );
         });
   }

@@ -6,7 +6,7 @@ class RoundButton extends StatelessWidget {
     required this.iconData,
     this.size = 26,
     this.iconSize,
-    this.color = Colors.blue,
+    this.color,
     this.onSubmit,
   }) : super(key: key);
 
@@ -14,7 +14,7 @@ class RoundButton extends StatelessWidget {
   final double size;
   final double? iconSize;
   final IconData iconData;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class RoundButton extends StatelessWidget {
           height: size,
           padding: const EdgeInsets.all(0),
           decoration: BoxDecoration(
-            color: color,
+            color: color ?? Theme.of(context).backgroundColor,
             borderRadius: BorderRadius.circular(size / 2),
           ),
           child: Icon(

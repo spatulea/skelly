@@ -61,9 +61,27 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
-          themeMode: settingsController.themeMode,
+          // theme: ThemeData(
+          //     brightness: Brightness.light,
+          //     primarySwatch: Colors.amber,
+          //     backgroundColor: Colors.amber.shade100),
+          theme: ThemeData.from(
+            colorScheme: ColorScheme.dark(
+              primary: Color(0xff3b6468),
+              primaryVariant: Color(0xffbfd7ea),
+              secondary: Color(0xff6c6f7f),
+              secondaryVariant: Color(0xffe1bbc9),
+              surface: Color(0xffbfd7ea),
+              background: Color(0xff12130f),
+              error: Color(0xffe1bbc9),
+              // onBackground: Colors.green,
+              // onPrimary: Colors.pinkAccent,
+              // onSecondary: Colors.amberAccent,
+              // onError: Colors.blueAccent,
+              // onSurface: Colors.redAccent,
+            ),
+          ),
+          // darkTheme: ThemeData.from(colorScheme: ColorScheme.dark()),
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
@@ -88,4 +106,27 @@ class MyApp extends StatelessWidget {
       },
     );
   }
+}
+
+/// Darken a color by [percent] amount (100 = black)
+// ........................................................
+Color darken(Color c, [int percent = 10]) {
+  assert(0 <= percent && percent <= 100);
+  if (percent == 0) return c;
+  var f = 1 - percent / 100;
+  return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
+      (c.blue * f).round());
+}
+
+/// Lighten a color by [percent] amount (100 = white)
+// ........................................................
+Color lighten(Color c, [int percent = 10]) {
+  assert(0 <= percent && percent <= 100);
+  if (percent == 0) return c;
+  var p = percent / 100;
+  return Color.fromARGB(
+      c.alpha,
+      c.red + ((255 - c.red) * p).round(),
+      c.green + ((255 - c.green) * p).round(),
+      c.blue + ((255 - c.blue) * p).round());
 }
