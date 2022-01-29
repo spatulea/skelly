@@ -70,10 +70,6 @@ class ThreadListView extends StatelessWidget {
                                     userController: userController,
                                   ),
                                 ),
-                                MaterialButton(
-                                  onPressed: () {},
-                                  child: Text('button'),
-                                )
                               ],
                             );
                     },

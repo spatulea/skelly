@@ -44,7 +44,7 @@ class _UnsubBubbleState extends State<UnsubBubble> {
       curve: Curves.easeInOut,
       width: _singleish ? widget.size : widget.size * 2 + 4,
       decoration: BoxDecoration(
-        color: Colors.grey.shade300,
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(widget.size / 2),
       ),
       // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),

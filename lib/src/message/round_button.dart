@@ -25,13 +25,13 @@ class RoundButton extends StatelessWidget {
           height: size,
           padding: const EdgeInsets.all(0),
           decoration: BoxDecoration(
-            color: color ?? Theme.of(context).backgroundColor,
+            color: color ?? Theme.of(context).colorScheme.primary,
             borderRadius: BorderRadius.circular(size / 2),
           ),
           child: Icon(
             iconData,
             size: iconSize ?? size,
-            color: Colors.grey.shade100,
+            color: Theme.of(context).textTheme.bodyText1!.color,
           ),
         ),
         onTap: onSubmit ?? () {},

@@ -67,12 +67,12 @@ class MyApp extends StatelessWidget {
           //     backgroundColor: Colors.amber.shade100),
           theme: ThemeData.from(
             colorScheme: ColorScheme.dark(
-              primary: Color(0xff3b6468),
-              primaryVariant: Color(0xffbfd7ea),
-              secondary: Color(0xff6c6f7f),
-              secondaryVariant: Color(0xffe1bbc9),
-              surface: Color(0xffbfd7ea),
-              background: Color(0xff12130f),
+              primary: Colors.blueGrey.shade700,
+              primaryVariant: Colors.blueGrey.shade800,
+              secondary: Colors.grey.shade700,
+              secondaryVariant: Colors.grey.shade800,
+              surface: Colors.black,
+              background: Colors.grey.shade900,
               error: Color(0xffe1bbc9),
               // onBackground: Colors.green,
               // onPrimary: Colors.pinkAccent,

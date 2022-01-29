@@ -70,7 +70,7 @@ class _InputBubbleState extends State<InputBubble> {
             ? const EdgeInsets.all(0)
             : const EdgeInsets.fromLTRB(10, 10, 10, 10),
         decoration: BoxDecoration(
-          color: Colors.grey.shade300,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(widget.buttonSize / 2),
         ),
         width: _isButtonState
@@ -80,7 +80,7 @@ class _InputBubbleState extends State<InputBubble> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             RoundButton(
-                iconData: _isButtonState ? Icons.add : Icons.cancel,
+                iconData: _isButtonState ? Icons.add : Icons.cancel_outlined,
                 size: 26,
                 onSubmit: () => setState(() {
                       if (_isTextState) {
@@ -93,6 +93,7 @@ class _InputBubbleState extends State<InputBubble> {
             Expanded(
               child: _isTextState
                   ? TextField(
+                      cursorColor: Theme.of(context).textTheme.bodyText1!.color,
                       controller: textController,
                       textAlignVertical: TextAlignVertical.bottom,
                       decoration: const InputDecoration(
