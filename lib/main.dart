@@ -1,9 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:skelly/firebase_options.dart';
 import 'package:skelly/src/debug/debug.dart';
 import 'package:skelly/src/user/auth_service.dart';
 import 'package:uni_links/uni_links.dart';
-// import 'package:uni_links/uni_links.dart';
 
 import 'src/app.dart';
 import 'src/settings/settings_controller.dart';
@@ -18,7 +19,7 @@ void main() async {
   debug('App Start', origin: origin);
   // Initialize Firebase
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   debug('Firebase Initialized', origin: origin);
 
   // Set up the Services and Controllers we need
@@ -51,18 +52,20 @@ void main() async {
   }
 
   // Attach listener to new links
-  uriLinkStream.listen((Uri? uri) {
-    debug('Got late link uri $uri', origin: origin);
-    if (uri != null) {
-      String? threadUid = uri.queryParameters['threadUid'];
-      if ((threadUid ?? '') != '') {
-        // Add passed threadUid to user's subscriptions
-        threadController.subscribeToThread(threadUid!);
+  if (!kIsWeb) {
+    uriLinkStream.listen((Uri? uri) {
+      debug('Got late link uri $uri', origin: origin);
+      if (uri != null) {
+        String? threadUid = uri.queryParameters['threadUid'];
+        if ((threadUid ?? '') != '') {
+          // Add passed threadUid to user's subscriptions
+          threadController.subscribeToThread(threadUid!);
+        }
       }
-    }
-  }, onError: (error, stackTrace) {
-    debug('Error processing URI $error $stackTrace', origin: origin);
-  });
+    }, onError: (error, stackTrace) {
+      debug('Error processing URI $error $stackTrace', origin: origin);
+    });
+  }
 
   debug('Service and Controller initialization complete', origin: origin);
 
