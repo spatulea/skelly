@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:skelly/src/debug/debug.dart';
 import 'package:skelly/src/user/user_controller.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'message.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -31,8 +35,13 @@ class MessageBubble extends StatelessWidget {
               borderRadius: BorderRadius.circular(13),
             ),
             child: message.text != ''
-                ? Text(
-                    message.text,
+                ? Linkify(
+                    text: message.text,
+                    onOpen: (link) async {
+                      if (!await launch(link.url)) {
+                        debug('Could not launch ${link.url}');
+                      }
+                    },
                   )
                 : const Icon(
                     Icons.do_not_disturb,

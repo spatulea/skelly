@@ -30,103 +30,73 @@ class MyApp extends StatelessWidget {
     return AnimatedBuilder(
       animation: settingsController,
       builder: (BuildContext context, Widget? child) {
-        return MaterialApp(
-          // Providing a restorationScopeId allows the Navigator built by the
-          // MaterialApp to restore the navigation stack when a user leaves and
-          // returns to the app after it has been killed while running in the
-          // background.
-          restorationScopeId: 'app',
+        // top-level onTap to hide keyboard when the user taps away
+        return GestureDetector(
+          onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+          child: MaterialApp(
+            // Providing a restorationScopeId allows the Navigator built by the
+            // MaterialApp to restore the navigation stack when a user leaves and
+            // returns to the app after it has been killed while running in the
+            // background.
+            restorationScopeId: 'app',
 
-          // Provide the generated AppLocalizations to the MaterialApp. This
-          // allows descendant Widgets to display the correct translations
-          // depending on the user's locale.
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate,
-          ],
-          supportedLocales: const [
-            Locale('en', ''), // English, no country code
-          ],
+            // Provide the generated AppLocalizations to the MaterialApp. This
+            // allows descendant Widgets to display the correct translations
+            // depending on the user's locale.
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('en', ''), // English, no country code
+            ],
 
-          // Use AppLocalizations to configure the correct application title
-          // depending on the user's locale.
-          //
-          // The appTitle is defined in .arb files found in the localization
-          // directory.
-          onGenerateTitle: (BuildContext context) =>
-              AppLocalizations.of(context)!.appTitle,
+            // Use AppLocalizations to configure the correct application title
+            // depending on the user's locale.
+            //
+            // The appTitle is defined in .arb files found in the localization
+            // directory.
+            onGenerateTitle: (BuildContext context) =>
+                AppLocalizations.of(context)!.appTitle,
 
-          // Define a light and dark color theme. Then, read the user's
-          // preferred ThemeMode (light, dark, or system default) from the
-          // SettingsController to display the correct theme.
-          // theme: ThemeData(
-          //     brightness: Brightness.light,
-          //     primarySwatch: Colors.amber,
-          //     backgroundColor: Colors.amber.shade100),
-          theme: ThemeData.from(
-            colorScheme: ColorScheme.dark(
-              primary: Colors.blueGrey.shade700,
-              primaryVariant: Colors.blueGrey.shade800,
-              secondary: Colors.grey.shade700,
-              secondaryVariant: Colors.grey.shade800,
-              surface: Colors.black,
-              background: Colors.grey.shade900,
-              error: Color(0xffe1bbc9),
-              // onBackground: Colors.green,
-              // onPrimary: Colors.pinkAccent,
-              // onSecondary: Colors.amberAccent,
-              // onError: Colors.blueAccent,
-              // onSurface: Colors.redAccent,
+            // Define a dark color theme only. It's hard enough getting one set
+            // of colors right.
+            theme: ThemeData.from(
+              colorScheme: ColorScheme.dark(
+                primary: Colors.blueGrey.shade500,
+                primaryVariant: Colors.blueGrey.shade700,
+                secondary: Colors.grey.shade700,
+                secondaryVariant: Colors.grey.shade800,
+                surface: Colors.grey.shade900,
+                background: Colors.grey.shade900,
+                error: Color(0xffe1bbc9),
+              ),
             ),
-          ),
-          // darkTheme: ThemeData.from(colorScheme: ColorScheme.dark()),
 
-          // Define a function to handle named routes in order to support
-          // Flutter web url navigation and deep linking.
-          onGenerateRoute: (RouteSettings routeSettings) {
-            return MaterialPageRoute<void>(
-              settings: routeSettings,
-              builder: (BuildContext context) {
-                switch (routeSettings.name) {
-                  case SettingsView.routeName:
-                    return SettingsView(controller: settingsController);
-                  case ThreadListView.routeName:
-                  default:
-                    return ThreadListView(
-                      threadController: threadController,
-                      userController: userController,
-                    );
-                }
-              },
-            );
-          },
+            // Define a function to handle named routes in order to support
+            // Flutter web url navigation and deep linking.
+            onGenerateRoute: (RouteSettings routeSettings) {
+              return MaterialPageRoute<void>(
+                settings: routeSettings,
+                builder: (BuildContext context) {
+                  switch (routeSettings.name) {
+                    case SettingsView.routeName:
+                      return SettingsView(controller: settingsController);
+                    case ThreadListView.routeName:
+                    default:
+                      return ThreadListView(
+                        threadController: threadController,
+                        userController: userController,
+                      );
+                  }
+                },
+              );
+            },
+          ),
         );
       },
     );
   }
-}
-
-/// Darken a color by [percent] amount (100 = black)
-// ........................................................
-Color darken(Color c, [int percent = 10]) {
-  assert(0 <= percent && percent <= 100);
-  if (percent == 0) return c;
-  var f = 1 - percent / 100;
-  return Color.fromARGB(c.alpha, (c.red * f).round(), (c.green * f).round(),
-      (c.blue * f).round());
-}
-
-/// Lighten a color by [percent] amount (100 = white)
-// ........................................................
-Color lighten(Color c, [int percent = 10]) {
-  assert(0 <= percent && percent <= 100);
-  if (percent == 0) return c;
-  var p = percent / 100;
-  return Color.fromARGB(
-      c.alpha,
-      c.red + ((255 - c.red) * p).round(),
-      c.green + ((255 - c.green) * p).round(),
-      c.blue + ((255 - c.blue) * p).round());
 }

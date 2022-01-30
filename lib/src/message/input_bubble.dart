@@ -80,7 +80,11 @@ class _InputBubbleState extends State<InputBubble> {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             RoundButton(
-                iconData: _isButtonState ? Icons.add : Icons.cancel_outlined,
+                color: _isButtonState
+                    ? null
+                    : Theme.of(context).colorScheme.secondaryVariant,
+                iconData:
+                    _isButtonState ? Icons.add_rounded : Icons.close_rounded,
                 size: 26,
                 onSubmit: () => setState(() {
                       if (_isTextState) {

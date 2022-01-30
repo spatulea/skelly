@@ -53,8 +53,8 @@ class _UnsubBubbleState extends State<UnsubBubble> {
         children: [
           RoundButton(
               size: widget.size,
-              iconData: _singleish ? Icons.remove : Icons.cancel,
-              color: Colors.red.shade300,
+              iconData: _singleish ? Icons.remove : Icons.close_rounded,
+              color: Theme.of(context).colorScheme.secondaryVariant,
               onSubmit: () {
                 _singleish
                     ? setState(() => _buttonState = ButtonState.toExpanded)
