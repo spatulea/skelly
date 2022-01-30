@@ -52,4 +52,12 @@ class UserController with ChangeNotifier {
       }
     });
   }
+
+  Future<void> blockUser(String userUid) async {
+    await _userService.addBlockedUser(userUid);
+  }
+
+  Future<void> unblockUser(String userUid) async {
+    await _userService.removeBlockedUser(userUid);
+  }
 }

@@ -48,9 +48,24 @@ class MessageBubble extends StatelessWidget {
                     color: Colors.grey,
                   ),
           ),
-          Text(
-            message.author,
-            textAlign: TextAlign.end,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                message.author,
+                textAlign: TextAlign.end,
+              ),
+              const SizedBox(width: 2),
+              GestureDetector(
+                onTap: () => userController.blockUser(message.userUid),
+                child: Icon(
+                  Icons.error_outline,
+                  size: 16,
+                  color: Theme.of(context).colorScheme.error,
+                ),
+              )
+            ],
           ),
         ],
       ),

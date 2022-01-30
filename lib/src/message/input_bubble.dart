@@ -75,7 +75,7 @@ class _InputBubbleState extends State<InputBubble> {
         ),
         width: _isButtonState
             ? widget.buttonSize
-            : MediaQuery.of(context).size.width - 150,
+            : (MediaQuery.of(context).size.width - 150).clamp(100, 400),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
