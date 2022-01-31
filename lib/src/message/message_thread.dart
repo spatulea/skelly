@@ -47,7 +47,12 @@ class _MessageThreadState extends State<MessageThread> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               // TODO optimize building of large threads
-              for (var message in thread.messages.values)
+
+              // for each message in a thread where the author's userUid is not
+              // in this user's blockedUsers list
+              for (var message in thread.messages.values.where((message) =>
+                  !widget.userController.blockedUsers
+                      .contains(message.userUid)))
                 MessageBubble(
                     message: message, userController: widget.userController),
               ThreadButtons(

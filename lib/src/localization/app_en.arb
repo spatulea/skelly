@@ -2,5 +2,8 @@
   "appTitle": "skelly",
   "@appTitle": {
     "description": "The title of the application"
-  }
+  },
+  "blockDialogTitle": "Block user",
+  "blockDialogBodyPre": "Block messages from ",
+  "blockDialogBodyPost": "This action cannot be undone."
 }

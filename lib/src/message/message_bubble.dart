@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:skelly/src/debug/debug.dart';
 import 'package:skelly/src/user/user_controller.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'message.dart';
 
@@ -15,6 +17,7 @@ class MessageBubble extends StatelessWidget {
 
   final Message message;
   final UserController userController;
+  static const String _className = 'MessageBubble';
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +42,8 @@ class MessageBubble extends StatelessWidget {
                     text: message.text,
                     onOpen: (link) async {
                       if (!await launch(link.url)) {
-                        debug('Could not launch ${link.url}');
+                        debug('Could not launch ${link.url}',
+                            origin: _className + '.build');
                       }
                     },
                   )
@@ -56,15 +60,42 @@ class MessageBubble extends StatelessWidget {
                 message.author,
                 textAlign: TextAlign.end,
               ),
-              const SizedBox(width: 2),
-              GestureDetector(
-                onTap: () => userController.blockUser(message.userUid),
-                child: Icon(
-                  Icons.error_outline,
-                  size: 16,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-              )
+              if (!isAuthor) const SizedBox(width: 2),
+              if (!isAuthor)
+                GestureDetector(
+                  child: Icon(
+                    Icons.error_outline,
+                    size: 16,
+                    color: Theme.of(context).colorScheme.error,
+                  ),
+                  onTap: () {
+                    showDialog<String>(
+                        context: context,
+                        builder: (BuildContext context) => CupertinoAlertDialog(
+                              title: Text(AppLocalizations.of(context)!
+                                  .blockDialogTitle),
+                              content: Text(AppLocalizations.of(context)!
+                                      .blockDialogBodyPre +
+                                  '${message.author}?\n' +
+                                  AppLocalizations.of(context)!
+                                      .blockDialogBodyPost),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, 'Cancel'),
+                                  child: const Icon(Icons.arrow_back_rounded),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    userController.blockUser(message.userUid);
+                                    Navigator.pop(context, 'OK');
+                                  },
+                                  child: const Icon(Icons.check),
+                                ),
+                              ],
+                            ));
+                  },
+                )
             ],
           ),
         ],

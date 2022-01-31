@@ -15,6 +15,9 @@ class UserController with ChangeNotifier {
   static String? _displayName;
   String? get displayName => _displayName;
 
+  static Set<String> _blockedUsers = {};
+  Set<String> get blockedUsers => _blockedUsers;
+
   UserController(this._userService, this._authService);
 
   Future<void> initialize() async {
@@ -43,7 +46,7 @@ class UserController with ChangeNotifier {
     // and initialize the UserService
     await _userService.initialize(userUid: _userUid!);
 
-    // And attach a listener to the user's displayName
+    // Attach a listener to the user's displayName
     _userService.userDisplayName.listen((newName) {
       if (newName != null && newName != _displayName) {
         debug('Received new displayName $newName', origin: origin);
@@ -51,13 +54,21 @@ class UserController with ChangeNotifier {
         notifyListeners();
       }
     });
+
+    // Attach a listener to the user's blockedUsers
+    _userService.blockedUsers.listen((newBlockedUsers) {
+      _blockedUsers = newBlockedUsers;
+      notifyListeners();
+    });
   }
 
-  Future<void> blockUser(String userUid) async {
-    await _userService.addBlockedUser(userUid);
+  void blockUser(String userUid) {
+    if (userUid != '' && userUid != this.userUid) {
+      _userService.addBlockedUser(userUid);
+    }
   }
 
-  Future<void> unblockUser(String userUid) async {
-    await _userService.removeBlockedUser(userUid);
+  void unblockUser(String userUid) {
+    _userService.removeBlockedUser(userUid);
   }
 }
