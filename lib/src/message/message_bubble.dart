@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:skelly/src/debug/debug.dart';
-import 'package:skelly/src/user/user_controller.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'message.dart';
+import '../debug/debug.dart';
+import '../user/user_controller.dart';
 
 class MessageBubble extends StatelessWidget {
   const MessageBubble({

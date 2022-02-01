@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:skelly/src/message/thread_controller.dart';
-import 'package:skelly/src/user/user_controller.dart';
 
+import '../user/user_controller.dart';
+import 'thread_controller.dart';
 import 'message.dart';
 import 'message_bubble.dart';
 import 'thread_buttons.dart';

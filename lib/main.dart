@@ -1,9 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:skelly/firebase_options.dart';
-import 'package:skelly/src/debug/debug.dart';
-import 'package:skelly/src/user/auth_service.dart';
 import 'package:uni_links/uni_links.dart';
 
 import 'src/app.dart';
@@ -13,6 +10,9 @@ import 'src/user/user_service.dart';
 import 'src/user/user_controller.dart';
 import 'src/message/thread_controller.dart';
 import 'src/message/thread_service.dart';
+import 'src/user/auth_service.dart';
+import 'src/firebase_options.dart';
+import 'src/debug/debug.dart';
 
 void main() async {
   const String origin = 'main';

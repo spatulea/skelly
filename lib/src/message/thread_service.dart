@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 
-import 'package:skelly/src/debug/debug.dart';
-import 'package:skelly/src/message/message.dart';
+import '../debug/debug.dart';
+import '../message/message.dart';
 
 class ThreadService {
   static const String _className = 'ThreadService';

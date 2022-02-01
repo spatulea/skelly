@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:skelly/src/message/message.dart';
 
-import 'package:skelly/src/message/round_button.dart';
-import 'package:skelly/src/message/thread_controller.dart';
-import 'package:skelly/src/user/user_controller.dart';
+import 'message.dart';
+import 'round_button.dart';
+import 'thread_controller.dart';
+import '../user/user_controller.dart';
 
 enum BubbleState {
   textField,
