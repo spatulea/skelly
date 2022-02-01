@@ -50,27 +50,35 @@ class ThreadListView extends StatelessWidget {
                     (BuildContext context, int index) {
                       return index < threadController.threads.length
                           // Build regular thread
-                          ? Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                              child: MessageThread(
-                                userController: userController,
-                                threadController: threadController,
-                                threadIndex: index,
+                          ? SafeArea(
+                              top: false,
+                              bottom: false,
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                                child: MessageThread(
+                                  userController: userController,
+                                  threadController: threadController,
+                                  threadIndex: index,
+                                ),
                               ),
                             )
                           // Or show the input bubble to create a new thread
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: InputBubble(
-                                    threadController: threadController,
-                                    userController: userController,
+                          : SafeArea(
+                              top: false,
+                              bottom: false,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: InputBubble(
+                                      threadController: threadController,
+                                      userController: userController,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             );
                     },
                     childCount: threadController.threads.length + 1,

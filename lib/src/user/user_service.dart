@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:skelly/src/debug/debug.dart';
+import '../debug/debug.dart';
 import 'generate_name.dart';
 
 class UserService {
