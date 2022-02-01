@@ -41,9 +41,11 @@ class MessageBubble extends StatelessWidget {
                 ? Linkify(
                     text: message.text,
                     onOpen: (link) async {
-                      if (!await launch(link.url)) {
-                        debug('Could not launch ${link.url}',
-                            origin: _className + '.build');
+                      try {
+                        var tmp = await launch(link.url);
+                      } catch (error) {
+                        debug('Could not launch ${link.url} error $error',
+                            origin: _className + '.build.Linkify.launch');
                       }
                     },
                   )
