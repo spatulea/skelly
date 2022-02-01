@@ -58,6 +58,7 @@ class MessageBubble extends StatelessWidget {
             children: [
               Text(
                 message.author,
+                style: TextStyle(color: Colors.grey.shade400),
                 textAlign: TextAlign.end,
               ),
               if (!isAuthor) const SizedBox(width: 2),

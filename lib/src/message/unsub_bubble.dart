@@ -44,7 +44,7 @@ class _UnsubBubbleState extends State<UnsubBubble> {
       curve: Curves.easeInOut,
       width: _singleish ? widget.size : widget.size * 2 + 4,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondary,
+        color: Theme.of(context).colorScheme.secondaryVariant,
         borderRadius: BorderRadius.circular(widget.size / 2),
       ),
       // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
@@ -54,7 +54,7 @@ class _UnsubBubbleState extends State<UnsubBubble> {
           RoundButton(
               size: widget.size,
               iconData: _singleish ? Icons.remove : Icons.close_rounded,
-              color: Theme.of(context).colorScheme.secondaryVariant,
+              color: Theme.of(context).colorScheme.secondary,
               onSubmit: () {
                 _singleish
                     ? setState(() => _buttonState = ButtonState.toExpanded)

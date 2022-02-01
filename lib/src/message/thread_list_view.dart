@@ -35,8 +35,8 @@ class ThreadListView extends StatelessWidget {
                     pinned: true,
                     // backgroundColor: Theme.of(context).backgroundColor,
                     toolbarHeight: 0.0,
-                    collapsedHeight: 14.0,
-                    expandedHeight: 30.0,
+                    collapsedHeight: 30.0,
+                    expandedHeight: 40.0,
                     flexibleSpace: FlexibleSpaceBar(
                       title: Text(
                         userController.displayName ?? '',

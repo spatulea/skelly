@@ -65,12 +65,13 @@ class MyApp extends StatelessWidget {
             // of colors right.
             theme: ThemeData.from(
               colorScheme: ColorScheme.dark(
-                primary: Colors.blueGrey.shade500,
-                primaryVariant: Colors.blueGrey.shade700,
-                secondary: Colors.grey.shade700,
-                secondaryVariant: Colors.grey.shade800,
-                surface: Colors.grey.shade900,
-                background: Colors.grey.shade900,
+                primary: Colors.blueGrey.shade600,
+                primaryVariant: Colors.blueGrey.shade800,
+                secondary: Colors.grey.shade800,
+                secondaryVariant: Colors.grey.shade900,
+                surface: Color(0xFF061218),
+                background: Color(0xFF061218),
+                // background: Color(0xFF212525),
                 error: Color(0xffe1bbc9),
               ),
             ),
