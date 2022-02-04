@@ -2,7 +2,7 @@
     package="com.spatulea.skelly">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="skelly"
+        android:label="strfsh"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
