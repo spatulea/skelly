@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:skelly/src/settings/settings_view.dart';
 
 import '../message/thread_controller.dart';
 import '../user/user_controller.dart';
@@ -32,9 +33,18 @@ class ThreadListView extends StatelessWidget {
                 shrinkWrap: false,
                 slivers: <Widget>[
                   SliverAppBar(
+                    actions: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 6, 6),
+                        child: GestureDetector(
+                            child: const Icon(Icons.settings),
+                            onTap: () => Navigator.restorablePushNamed(
+                                context, SettingsView.routeName)),
+                      ),
+                    ],
                     pinned: true,
                     // backgroundColor: Theme.of(context).backgroundColor,
-                    toolbarHeight: 0.0,
+                    toolbarHeight: 30.0,
                     collapsedHeight: 30.0,
                     expandedHeight: 40.0,
                     flexibleSpace: FlexibleSpaceBar(

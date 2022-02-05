@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import 'settings_service.dart';
 
@@ -9,6 +10,8 @@ import 'settings_service.dart';
 /// uses the SettingsService to store and retrieve user settings.
 class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
+  late final String _version;
+  String get version => _version;
 
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
@@ -25,6 +28,9 @@ class SettingsController with ChangeNotifier {
   /// settings from the service.
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
+
+    final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    _version = packageInfo.version;
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
