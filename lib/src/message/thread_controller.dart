@@ -27,14 +27,14 @@ class ThreadController with ChangeNotifier {
   }
 
   void subscribeThreads() {
-    const String _origin = _className + '.subscribeThreads';
+    const String origin = _className + '.subscribeThreads';
 
     Set<String> cachedSubscribedThreads = {};
     _userService.subscribedThreads.listen((subscribedThreads) {
       // Find and subscribe to the new threads
       for (String threadUid
           in subscribedThreads.difference(cachedSubscribedThreads)) {
-        debug('Adding new thread subscription $threadUid', origin: _origin);
+        debug('Adding new thread subscription $threadUid', origin: origin);
 
         // Create the local empty thread
         _threads.putIfAbsent(threadUid, () => Thread({}, uid: threadUid));
@@ -58,7 +58,7 @@ class ThreadController with ChangeNotifier {
       // Find and cancel subscriptions to old threads
       for (String threadUid
           in cachedSubscribedThreads.difference(subscribedThreads)) {
-        debug('Removing old thread subscription $threadUid', origin: _origin);
+        debug('Removing old thread subscription $threadUid', origin: origin);
         // Cancel the subscription and remove it.
         _threadSubscriptions[threadUid]?.cancel();
         _threadSubscriptions.remove(threadUid);
@@ -75,9 +75,9 @@ class ThreadController with ChangeNotifier {
   }
 
   void putToThread(String threadUid, Message message) {
-    const String _origin = _className + '.putToThread';
+    const String origin = _className + '.putToThread';
 
-    debug('Adding message to thread $threadUid', origin: _origin);
+    debug('Adding message to thread $threadUid', origin: origin);
     _threadService.putMessage(threadUid, message);
   }
 

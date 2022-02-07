@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../debug/debug.dart';
 import 'settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -10,6 +11,7 @@ import 'settings_service.dart';
 /// uses the SettingsService to store and retrieve user settings.
 class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
+  static const _className = 'SettingsController';
   late final String _version;
   String get version => _version;
 
@@ -27,15 +29,19 @@ class SettingsController with ChangeNotifier {
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
   Future<void> loadSettings() async {
+    const origin = _className + '.loadSettings';
+
     _themeMode = await _settingsService.themeMode();
 
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
     _version = packageInfo.version;
+    debug('Version: $_version', origin: origin);
 
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
 
+  // TODO not current used. Left here as example ChangeNotifier method
   /// Update and persist the ThemeMode based on the user's selection.
   Future<void> updateThemeMode(ThemeMode? newThemeMode) async {
     if (newThemeMode == null) return;

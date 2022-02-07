@@ -69,10 +69,10 @@ class MyApp extends StatelessWidget {
                 primaryVariant: Colors.blueGrey.shade800,
                 secondary: Colors.grey.shade800,
                 secondaryVariant: Colors.grey.shade900,
-                surface: Color(0xFF061218),
-                background: Color(0xFF061218),
+                surface: const Color(0xFF061218),
+                background: const Color(0xFF061218),
                 // background: Color(0xFF212525),
-                error: Color(0xffe1bbc9),
+                error: const Color(0xffe1bbc9),
               ),
             ),
 

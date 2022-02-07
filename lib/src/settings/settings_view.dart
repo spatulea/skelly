@@ -1,4 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:skelly/src/debug/debug.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'settings_controller.dart';
 
@@ -7,6 +10,7 @@ import 'settings_controller.dart';
 /// When a user changes a setting, the SettingsController is updated and
 /// Widgets that listen to the SettingsController are rebuilt.
 class SettingsView extends StatelessWidget {
+  static const _className = 'SettingsView';
   const SettingsView({Key? key, required this.controller}) : super(key: key);
 
   static const routeName = '/settings';
@@ -53,13 +57,72 @@ class SettingsView extends StatelessWidget {
             ),
             Center(
               child: Text(
-                '\u00a9 2022 strfsh. Version ${controller.version}',
+                '\u00a9 2022 Sebastian Patulea\n strfsh version ${controller.version}',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).colorScheme.secondary),
+                textAlign: TextAlign.center,
               ),
-            )
+            ),
+            Center(
+              child: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'You can find the ',
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                  TextSpan(
+                      text: 'Source Code',
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          const link = 'https://github.com/spatulea/skelly';
+                          if (await canLaunch(link)) {
+                            await launch(link).onError((error, stackTrace) {
+                              debug('Error $error stackTrace $stackTrace');
+                              return false;
+                            });
+                          } else {
+                            debug('Could not launch $link',
+                                origin: _className + '.build.Linkify.opOpen');
+                          }
+                        }),
+                  TextSpan(
+                    text: '\nand ',
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                  TextSpan(
+                      text: 'Privacy Policy',
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                          decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () async {
+                          const link =
+                              'https://github.com/spatulea/skelly/blob/main/PRIVACY_POLICY.md';
+                          if (await canLaunch(link)) {
+                            await launch(link).onError((error, stackTrace) {
+                              debug('Error $error stackTrace $stackTrace');
+                              return false;
+                            });
+                          } else {
+                            debug('Could not launch $link',
+                                origin: _className + '.build.Linkify.opOpen');
+                          }
+                        }),
+                  TextSpan(
+                    text: ' on GitHub.',
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).colorScheme.secondary),
+                  ),
+                ]),
+              ),
+            ),
           ],
         ),
       ),
