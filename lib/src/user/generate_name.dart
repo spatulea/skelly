@@ -46,9 +46,11 @@ abstract class GenerateName {
     debug('Got ${responseJson.length} adjectives for animal $animal',
         origin: origin);
 
-    // and pick out a random word from it
-    String adjective =
-        responseJson[Random().nextInt(responseJson.length)]['word'];
+    // and pick out a random adjective word from it
+    String adjective = 'Single';
+    if (responseJson.isNotEmpty) {
+      adjective = responseJson[Random().nextInt(responseJson.length)]['word'];
+    }
 
     return (adjective.capitalize() + ' ' + animal.capitalize());
   }
