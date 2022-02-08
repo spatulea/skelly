@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'message.dart';
 import 'thread_service.dart';
+import 'notification_service.dart';
 import '../user/user_service.dart';
 import '../debug/debug.dart';
 
@@ -14,6 +15,7 @@ class ThreadController with ChangeNotifier {
 
   final ThreadService _threadService;
   final UserService _userService;
+  final _notificationService = NotificationService();
 
   final Map<String, Thread> _threads = {};
 
@@ -24,6 +26,7 @@ class ThreadController with ChangeNotifier {
 
   void initialize() {
     _threadService.initialize();
+    _notificationService.initialize();
   }
 
   void subscribeThreads() {
