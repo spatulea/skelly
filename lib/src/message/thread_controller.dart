@@ -24,9 +24,9 @@ class ThreadController with ChangeNotifier {
   // Return thread map as list that can be iterated by the UI
   List<Thread> get threads => _threads.values.toList();
 
-  void initialize() {
+  Future<void> initialize() async {
     _threadService.initialize();
-    _notificationService.initialize();
+    await _notificationService.initialize();
   }
 
   void subscribeThreads() {

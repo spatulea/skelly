@@ -29,7 +29,7 @@ void main() async {
   final threadController = ThreadController(userService, ThreadService());
 
   await userController.initialize();
-  threadController.initialize();
+  await threadController.initialize();
   threadController.subscribeThreads();
 
   // Load the user's preferred theme while the splash screen is displayed.

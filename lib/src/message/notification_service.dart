@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:skelly/src/debug/debug.dart';
 
@@ -16,6 +18,14 @@ class NotificationService {
             (await FirebaseMessaging.instance.getToken() ?? 'nullFcmToken'),
         origin: origin);
 
+    // Request to present notification "popup"
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true, // Required to display a heads up notification
+      badge: true,
+      sound: true,
+    );
+
     // Handler foreground message stream
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       debug(
@@ -33,14 +43,14 @@ class NotificationService {
   Future<void> subscribe(Set<String> threadIds) async {
     for (String threadId in threadIds) {
       await FirebaseMessaging.instance.subscribeToTopic(threadId);
-      await Future.delayed(const Duration(milliseconds: 50));
+      await Future.delayed(Duration(milliseconds: 40 + Random().nextInt(10)));
     }
   }
 
   Future<void> unsubscribe(Set<String> threadIds) async {
     for (String threadId in threadIds) {
       FirebaseMessaging.instance.unsubscribeFromTopic(threadId);
-      await Future.delayed(const Duration(milliseconds: 50));
+      await Future.delayed(Duration(milliseconds: 40 + Random().nextInt(10)));
     }
   }
 }
