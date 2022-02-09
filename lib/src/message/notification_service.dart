@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:skelly/src/debug/debug.dart';
 
+// Notification handler when app is in background
 Future<void> _messagingBackgroundHandler(RemoteMessage message) async {
   print(
       'MessagingService._messagingBackgroundHandler: got background message: ${message.messageId}:${message.notification?.title}:${message.notification?.body}');
@@ -18,13 +19,19 @@ class NotificationService {
             (await FirebaseMessaging.instance.getToken() ?? 'nullFcmToken'),
         origin: origin);
 
-    // Request to present notification "popup"
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-      alert: true, // Required to display a heads up notification
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: true,
       badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
       sound: true,
     );
+
+    debug('Granted notification permissing: ${settings.authorizationStatus}',
+        origin: origin);
 
     // Handler foreground message stream
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
