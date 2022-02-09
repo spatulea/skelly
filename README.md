@@ -28,21 +28,21 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
     - Anonymous
   - Realtime Database
     - threads
-      - <threadUid>
+      - \<threadUid\>
         - authorName
         - authorUid
         - timeStamp
         - messages
-          - <messageUid>
+          - \<messageUid\>
             - text
             - author
             - userUid
             - timeStamp
   - Firestore Collections
     - users
-      - <userUid>
+      - \<userUid\>
         - displayName
         - subscribedThreads
-          - <threadUid>
+          - \<threadUid\>
         - authoredThreads
-          - <threadUid>
+          - \<threadUid\>
