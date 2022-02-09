@@ -21,7 +21,7 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
   - Last but perhaps most important: **learn**
 
 ## Notes
-  - ios/Runner/GoogleService-Info.plist and lib/firebase_options.dart are encrypted to protect API keys.
+  - lib/firebase_options.dart is encrypted to protect API keys.
 
 ## Firebase
   - Authentication
