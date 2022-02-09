@@ -18,8 +18,11 @@ class ThreadService {
     const String origin = _className + '.messageStream';
 
     // query Realtime Database for last n messages in thread
-    var queryRef =
-        _threadsRef.child(threadUid).orderByChild('timeStamp').limitToLast(100);
+    var queryRef = _threadsRef
+        .child(threadUid)
+        .child('messages')
+        .orderByChild('timeStamp')
+        .limitToLast(100);
 
     // create a transform stream of messages in the thread to convert JSON data
     // into message objects
@@ -43,7 +46,7 @@ class ThreadService {
 
     // Get new uuid from message thread (this is done with local time,
     // no remote connection)
-    var messageRef = _threadsRef.child(threadUid).push();
+    var messageRef = _threadsRef.child(threadUid).child('messages').push();
 
     // add message contents to the uuid
     await messageRef.set(message.toJson()).then((_) => debug(
@@ -55,10 +58,15 @@ class ThreadService {
     // Get new thread uuid
     var newThreadRef = _threadsRef.push();
 
-    // add message contents to new thread
-    await putMessage(newThreadRef.key!, message).then((_) => debug(
-        'Created new thread ${newThreadRef.key}',
+    await newThreadRef.set({
+      'authorName': message.author,
+      'authorUid': message.userUid,
+      'timeStamp': ServerValue.timestamp
+    }).then((_) => debug('Created new thread ${newThreadRef.key}',
         origin: _className + '.createThread'));
+
+    // add message contents to new thread
+    await putMessage(newThreadRef.key!, message);
 
     return newThreadRef.key!;
   }

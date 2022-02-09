@@ -21,34 +21,28 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
   - Last but perhaps most important: **learn**
 
 ## Notes
-  - ios/Runner/GoogleService-Info.plist is encrypted to protect the API key.
-  - Firebase resources are organized as follows:
-    - Authentication
-      - Anonymous
-    - Realtime Database
-      - threads
-        - threadUid
-          - messageUid
+  - ios/Runner/GoogleService-Info.plist and lib/firebase_options.dart are encrypted to protect API keys.
+
+## Firebase
+  - Authentication
+    - Anonymous
+  - Realtime Database
+    - threads
+      - <threadUid>
+        - authorName
+        - authorUid
+        - timeStamp
+        - messages
+          - <messageUid>
             - text
             - author
             - userUid
             - timeStamp
-          - messageUid
-            - ...
-        - threadUid
-          - ...
-        - ...
-    - Firestore Collections
-      - users
-        - userUid
-          - displayName
-          - subscribedThreads
-            - threadUid1
-            - threadUid2
-            - ...
-          - authoredThreads
-            - threadUid1
-            - ...
-        - userUid
-          - ...
-        - ...
+  - Firestore Collections
+    - users
+      - <userUid>
+        - displayName
+        - subscribedThreads
+          - <threadUid>
+        - authoredThreads
+          - <threadUid>
