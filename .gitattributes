@@ -1,2 +1,4 @@
 GoogleService-Info.plist filter=git-crypt diff=git-crypt
 firebase_options.dart filter=git-crypt diff=git-crypt
+firestore.rules filter=git-crypt diff=git-crypt
+database.rules.json filter=git-crypt diff=git-crypt
