@@ -30,6 +30,14 @@ class NotificationService {
       sound: true,
     );
 
+    // Make sure foreground notifications are disabled
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: false,
+      badge: false,
+      sound: false,
+    );
+
     debug('Granted notification permissing: ${settings.authorizationStatus}',
         origin: origin);
 
@@ -47,17 +55,13 @@ class NotificationService {
     FirebaseMessaging.instance.subscribeToTopic('general');
   }
 
-  Future<void> subscribe(Set<String> threadIds) async {
-    for (String threadId in threadIds) {
-      await FirebaseMessaging.instance.subscribeToTopic(threadId);
-      await Future.delayed(Duration(milliseconds: 40 + Random().nextInt(10)));
-    }
+  Future<void> subscribe(String threadUid) async {
+    await Future.delayed(Duration(milliseconds: 10 + Random().nextInt(90)));
+    await FirebaseMessaging.instance.subscribeToTopic(threadUid);
   }
 
-  Future<void> unsubscribe(Set<String> threadIds) async {
-    for (String threadId in threadIds) {
-      FirebaseMessaging.instance.unsubscribeFromTopic(threadId);
-      await Future.delayed(Duration(milliseconds: 40 + Random().nextInt(10)));
-    }
+  Future<void> unsubscribe(String threadUid) async {
+    await Future.delayed(Duration(milliseconds: 10 + Random().nextInt(90)));
+    FirebaseMessaging.instance.unsubscribeFromTopic(threadUid);
   }
 }

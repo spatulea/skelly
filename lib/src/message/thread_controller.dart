@@ -54,6 +54,8 @@ class ThreadController with ChangeNotifier {
                     notifyListeners();
                   }
                 }));
+        // Subscribe to notifications for this thread
+        _notificationService.subscribe(threadUid);
         // Add the new threads to listener cache
         cachedSubscribedThreads.add(threadUid);
       }
@@ -68,6 +70,9 @@ class ThreadController with ChangeNotifier {
 
         // remove the thread local thread cache
         _threads.remove(threadUid);
+
+        // Cancel notification subscription
+        _notificationService.unsubscribe(threadUid);
 
         // remove the threadUid from the listener cache
         cachedSubscribedThreads.remove(threadUid);
