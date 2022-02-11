@@ -70,7 +70,7 @@ class MockThreadService implements ThreadService {
   void initialize() {}
 
   @override
-  Stream<Message> messageStream(String threadUid) async* {
+  Stream<Message> newMessageStream(String threadUid) async* {
     // cancel the stream if the threadUid doesn't exist
     if (!_mockThreadData.containsKey(threadUid)) return;
 

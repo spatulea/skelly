@@ -19,7 +19,7 @@ class ThreadController with ChangeNotifier {
 
   final Map<String, Thread> _threads = {};
 
-  final Map<String, StreamSubscription> _threadSubscriptions = {};
+  final Map<String, List<StreamSubscription>> _threadSubscriptions = {};
 
   // Return thread map as list that can be iterated by the UI
   List<Thread> get threads => _threads.values.toList();
@@ -42,18 +42,34 @@ class ThreadController with ChangeNotifier {
         // Create the local empty thread
         _threads.putIfAbsent(threadUid, () => Thread({}, uid: threadUid));
 
-        // create and add the message stream
+        // create and add the newMessage & removedMessage streams
         _threadSubscriptions.putIfAbsent(
             threadUid,
-            () => _threadService.messageStream(threadUid).listen((newMessage) {
-                  if (newMessage != null) {
-                    // Add new messages to the thread and notify the UI
-                    _threads[threadUid]!
-                        .messages
-                        .putIfAbsent(newMessage.uid!, () => newMessage);
-                    notifyListeners();
-                  }
-                }));
+            () => [
+                  // new message stream
+                  _threadService
+                      .newMessageStream(threadUid)
+                      .listen((newMessage) {
+                    if (newMessage != null) {
+                      // Add new messages to the thread and notify the UI
+                      _threads[threadUid]!
+                          .messages
+                          .putIfAbsent(newMessage.uid!, () => newMessage);
+                      notifyListeners();
+                    }
+                  }),
+                  // remove message stream
+                  _threadService
+                      .removedMessageStream(threadUid)
+                      .listen((removedMessage) {
+                    if (removedMessage != null) {
+                      // Remove message from thread and notify the UI
+                      _threads[threadUid]!.messages.remove(removedMessage.uid!);
+                      notifyListeners();
+                    }
+                  })
+                ]);
+
         // Subscribe to notifications for this thread
         _notificationService.subscribe(threadUid);
         // Add the new threads to listener cache
@@ -64,8 +80,9 @@ class ThreadController with ChangeNotifier {
       for (String threadUid
           in cachedSubscribedThreads.difference(subscribedThreads)) {
         debug('Removing old thread subscription $threadUid', origin: origin);
-        // Cancel the subscription and remove it.
-        _threadSubscriptions[threadUid]?.cancel();
+        // Cancel the message subscriptions and remove the thread
+        _threadSubscriptions[threadUid]
+            ?.forEach((subscription) => subscription.cancel());
         _threadSubscriptions.remove(threadUid);
 
         // remove the thread local thread cache

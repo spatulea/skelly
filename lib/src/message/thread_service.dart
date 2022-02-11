@@ -14,8 +14,8 @@ class ThreadService {
     _threadsRef = _messageDb.ref('threads');
   }
 
-  Stream<Message?> messageStream(String threadUid) {
-    const String origin = _className + '.messageStream';
+  Stream<Message?> newMessageStream(String threadUid) {
+    const String origin = _className + '.newMessageStream';
 
     // query Realtime Database for last n messages in thread
     var queryRef = _threadsRef
@@ -41,17 +41,47 @@ class ThreadService {
     });
   }
 
-  Future<void> putMessage(String threadUid, Message message) async {
-    // TODO Should I check the thread exists?
+  Stream<Message?> removedMessageStream(String threadUid) {
+    const String origin = _className + '.removeMessageStream';
 
+    var queryRef = _threadsRef
+        .child(threadUid)
+        .child('messages')
+        .orderByChild('timeStamp')
+        .limitToLast(100);
+
+    // create a transform stream of messages that were removed from the thread
+    // to convert JSON into message object
+    return queryRef.onChildRemoved.map((event) {
+      Message? removedMessage;
+      if (event.snapshot.exists) {
+        try {
+          removedMessage = Message.fromJson(
+              event.snapshot.value as Map<dynamic, dynamic>,
+              event.snapshot.key);
+        } catch (e) {
+          debug('Error $e from $threadUid stream', origin: origin);
+        }
+        return removedMessage;
+      }
+    });
+  }
+
+  Future<void> putMessage(String threadUid, Message message) async {
     // Get new uuid from message thread (this is done with local time,
     // no remote connection)
     var messageRef = _threadsRef.child(threadUid).child('messages').push();
 
     // add message contents to the uuid
-    await messageRef.set(message.toJson()).then((_) => debug(
-        'Added message ${messageRef.key} to thread $threadUid',
-        origin: _className + '.putMessage'));
+    await messageRef
+        .set(message.toJson())
+        .then((_) => debug(
+            'Added message ${messageRef.key} to thread $threadUid',
+            origin: _className + '.putMessage'))
+        .catchError((error, _) {
+      debug('Error $error writing to thread $threadUid',
+          origin: _className + '.putMessage');
+    });
   }
 
   Future<String> createThread(Message message) async {

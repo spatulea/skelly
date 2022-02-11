@@ -22,6 +22,7 @@ class MessageBubble extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isAuthor = message.authorUid == (userController.userUid ?? '');
+    final bool isBlockable = !isAuthor && message.authorUid != 'strfshUid';
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
@@ -63,8 +64,8 @@ class MessageBubble extends StatelessWidget {
                 style: TextStyle(color: Colors.grey.shade400),
                 textAlign: TextAlign.end,
               ),
-              if (!isAuthor) const SizedBox(width: 2),
-              if (!isAuthor)
+              if (isBlockable) const SizedBox(width: 2),
+              if (isBlockable)
                 GestureDetector(
                   child: Icon(
                     Icons.error_outline,
