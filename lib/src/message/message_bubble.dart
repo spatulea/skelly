@@ -21,11 +21,11 @@ class MessageBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isAuthor = message.userUid == (userController.userUid ?? '');
+    final bool isAuthor = message.authorUid == (userController.userUid ?? '');
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
       padding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-      width: flexWidth(message.text.length, message.author.length, context),
+      width: flexWidth(message.text.length, message.authorName.length, context),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
@@ -59,7 +59,7 @@ class MessageBubble extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                message.author,
+                message.authorName,
                 style: TextStyle(color: Colors.grey.shade400),
                 textAlign: TextAlign.end,
               ),
@@ -79,7 +79,7 @@ class MessageBubble extends StatelessWidget {
                                   .blockDialogTitle),
                               content: Text(AppLocalizations.of(context)!
                                       .blockDialogBodyPre +
-                                  '${message.author}?\n' +
+                                  '${message.authorName}?\n' +
                                   AppLocalizations.of(context)!
                                       .blockDialogBodyPost),
                               actions: <Widget>[
@@ -90,7 +90,7 @@ class MessageBubble extends StatelessWidget {
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    userController.blockUser(message.userUid);
+                                    userController.blockUser(message.authorUid);
                                     Navigator.pop(context, 'OK');
                                   },
                                   child: const Icon(Icons.check),

@@ -16,8 +16,8 @@ void main() {
       final Message fromJsonTestMessage = Message(
         uid: 'testUid',
         text: 'testText',
-        author: 'testAuthor',
-        userUid: 'testUserUid',
+        authorName: 'testAuthor',
+        authorUid: 'testUserUid',
         timeStamp: Timestamp.fromMillisecondsSinceEpoch(1642398059739),
         isNew: true,
         isTest: false,
@@ -27,8 +27,8 @@ void main() {
     test('convert to json', () {
       final Message toJsonTestMessage = Message(
         text: 'testText',
-        author: 'testAuthor',
-        userUid: 'testUserUid',
+        authorName: 'testAuthor',
+        authorUid: 'testUserUid',
         timeStamp: Timestamp.fromMillisecondsSinceEpoch(1642398059739),
         isNew: true,
         isTest: true,

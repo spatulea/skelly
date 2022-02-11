@@ -59,8 +59,8 @@ class ThreadService {
     var newThreadRef = _threadsRef.push();
 
     await newThreadRef.set({
-      'authorName': message.author,
-      'authorUid': message.userUid,
+      'authorName': message.authorName,
+      'authorUid': message.authorUid,
       'timeStamp': ServerValue.timestamp
     }).then((_) => debug('Created new thread ${newThreadRef.key}',
         origin: _className + '.createThread'));

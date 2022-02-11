@@ -35,7 +35,7 @@ class ThreadListView extends StatelessWidget {
                   SliverAppBar(
                     actions: <Widget>[
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 6, 6),
+                        padding: const EdgeInsets.fromLTRB(0, 0, 16, 6),
                         child: GestureDetector(
                             child: const Icon(Icons.settings),
                             onTap: () => Navigator.restorablePushNamed(

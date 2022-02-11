@@ -52,7 +52,7 @@ class _MessageThreadState extends State<MessageThread> {
               // in this user's blockedUsers list
               for (var message in thread.messages.values.where((message) =>
                   !widget.userController.blockedUsers
-                      .contains(message.userUid)))
+                      .contains(message.authorUid)))
                 MessageBubble(
                     message: message, userController: widget.userController),
               ThreadButtons(

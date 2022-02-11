@@ -10,8 +10,8 @@ class Thread {
 class Message {
   final String? uid;
   final String text;
-  final String author;
-  final String userUid;
+  final String authorName;
+  final String authorUid;
   final Timestamp? timeStamp;
   bool? isNew;
   final bool isTest;
@@ -19,16 +19,16 @@ class Message {
   Message(
       {this.uid,
       required this.text,
-      required this.author,
-      required this.userUid,
+      required this.authorName,
+      required this.authorUid,
       this.timeStamp,
       this.isNew,
       this.isTest = false});
 
   Message.fromJson(Map<dynamic, dynamic> json, this.uid)
       : text = json['text'] as String,
-        author = json['author'] as String,
-        userUid = json['userUid'] as String,
+        authorName = json['authorName'] as String,
+        authorUid = json['authorUid'] as String,
         timeStamp =
             Timestamp.fromMillisecondsSinceEpoch(json['timeStamp'] as int),
         isNew = true,
@@ -37,8 +37,8 @@ class Message {
   Map<dynamic, dynamic> toJson() => <dynamic, dynamic>{
         // 'uid': uid,
         'text': text,
-        'author': author,
-        'userUid': userUid,
+        'authorName': authorName,
+        'authorUid': authorUid,
         // if testing use given timestamp not remote
         'timeStamp': isTest
             ? (timeStamp?.millisecondsSinceEpoch ?? 1642398059739)
@@ -52,8 +52,8 @@ class Message {
       other is Message &&
           uid == other.uid &&
           text == other.text &&
-          author == other.author &&
-          userUid == other.userUid &&
+          authorName == other.authorName &&
+          authorUid == other.authorUid &&
           timeStamp == other.timeStamp &&
           isNew == other.isNew;
 
@@ -61,8 +61,8 @@ class Message {
   int get hashCode =>
       uid.hashCode ^
       text.hashCode ^
-      author.hashCode ^
-      userUid.hashCode ^
+      authorName.hashCode ^
+      authorUid.hashCode ^
       timeStamp.hashCode ^
       isNew.hashCode;
 }

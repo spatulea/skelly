@@ -46,7 +46,6 @@ class _InputBubbleState extends State<InputBubble> {
   void initState() {
     _bubbleState = BubbleState.plusButton;
     textController = TextEditingController();
-    // TODO: implement initState
     super.initState();
   }
 
@@ -123,8 +122,8 @@ class _InputBubbleState extends State<InputBubble> {
                       onSubmit: () => setState(() {
                             final Message message = Message(
                                 text: textController.text,
-                                author: widget.userController.displayName!,
-                                userUid: widget.userController.userUid!,
+                                authorName: widget.userController.displayName!,
+                                authorUid: widget.userController.userUid!,
                                 isTest: false);
                             widget.thread == null
                                 ? widget.threadController.createThread(message)

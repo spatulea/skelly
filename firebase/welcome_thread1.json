@@ -1,0 +1,19 @@
+{
+  "authorName":"strfsh",
+  "authorUid":"strfshUid",
+  "timeStamp":1644476051579,
+  "messages":{
+    "messageUid1":{
+      "authorName":"strfsh",
+      "timeStamp":1644476051579,
+      "authorUid":"strfshUid",
+      "text":"First Message"
+    },
+    "messageUid2":{
+      "authorName":"strfsh",
+      "timeStamp":1644476051579,
+      "authorUid":"strfshUid",
+      "text":"Second Message"
+    }
+  }
+}
