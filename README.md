@@ -16,12 +16,15 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
     - Realtime DB for threads & messages
     - Auth for anonymous-only user authentication
     - Use Firestore security rules to manage access control and data validation (no cloud functions)
+    - Cloud Messaging to push notifications
+    - Cloud Functions to trigger notifications
   - Submit (and be accepted by) both app stores
     - Include reporting and blocking/unsubscribe features as required by app stores
   - Last but perhaps most important: **learn**
 
 ## Notes
-  - lib/firebase_options.dart is encrypted to protect API keys.
+  - `lib/firebase_options.dart` is encrypted to protect API keys.
+  - `firebase/firestore.rules` and `database.rules.json` are encrypted. Contact me via email for unencrypted versions.
 
 ## Firebase
   - Authentication
@@ -35,8 +38,8 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
         - messages
           - \<messageUid\>
             - text
-            - author
-            - userUid
+            - authorName
+            - authorUid
             - timeStamp
   - Firestore Collections
     - users
@@ -46,3 +49,5 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
           - \<threadUid\>
         - authoredThreads
           - \<threadUid\>
+  - Cloud Functions
+    - notify
