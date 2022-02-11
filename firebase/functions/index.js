@@ -1,10 +1,9 @@
 // 'use strict';
 
-// The Cloud Functions for Firebase SDK to create Cloud Functions
-// and set up triggers.
+// The Cloud Functions for Firebase SDK
 const functions = require("firebase-functions");
 
-// The Firebase Admin SDK to access Realtime Database.
+// The Firebase Admin SDK
 const admin = require("firebase-admin");
 admin.initializeApp();
 
@@ -49,5 +48,13 @@ exports.notify = functions.database
             error);
       }
     });
+
+exports.newUser = functions.firestore.document('users/{userUid}').onCreate((snapshot, context) => {
+  // Add welcome threads to new user's thread subscriptions
+  const newSubscriptions = ["welcomeThread1"];
+  functions.logger.log("Adding welcome package to user ", context.params.userUid);
+
+  return snapshot.ref.set({"subscribedThreads": newSubscriptions}, {merge: true});
+});
 
 // https://firebase.google.com/docs/functions/write-firebase-functions

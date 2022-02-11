@@ -35,7 +35,7 @@ class UserService {
             origin: origin);
         await _usersCollection.doc(userUid).set({
           'displayName': await GenerateName.name,
-          'subscribedThreads': ['threadUid1'],
+          'subscribedThreads': [],
           'authoredThreads': [],
           'blockedUsers': [],
           'lastUpdateTime': FieldValue.serverTimestamp(),
