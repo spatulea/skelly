@@ -42,19 +42,21 @@ class _UnsubBubbleState extends State<UnsubBubble> {
       margin: EdgeInsets.all(widget.margin),
       duration: const Duration(milliseconds: 200),
       curve: Curves.easeInOut,
-      width: _singleish ? widget.size : widget.size * 2 + 4,
+      height: _singleish ? widget.size : widget.size * 2 + 4,
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.secondaryVariant,
+        color: Theme.of(context).colorScheme.secondary,
         borderRadius: BorderRadius.circular(widget.size / 2),
       ),
       // padding: const EdgeInsets.fromLTRB(2, 2, 2, 2),
-      child: Row(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           RoundButton(
               size: widget.size,
               iconData: _singleish ? Icons.remove : Icons.close_rounded,
-              color: Theme.of(context).colorScheme.secondary,
+              color: _singleish
+                  ? Theme.of(context).colorScheme.secondary
+                  : Theme.of(context).colorScheme.secondaryVariant,
               onSubmit: () {
                 _singleish
                     ? setState(() => _buttonState = ButtonState.toExpanded)
@@ -74,7 +76,7 @@ class _UnsubBubbleState extends State<UnsubBubble> {
                         .unsubscribeThread(widget.thread))
                 : Container(width: 0),
           )
-        ],
+        ].reversed.toList(),
       ),
       onEnd: () {
         _singleish

@@ -25,32 +25,44 @@ class ThreadButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(10, 5, 5, 20),
-      child: Stack(
+      child: Row(
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          Stack(
+            alignment: AlignmentDirectional.bottomStart,
             children: [
-              const SizedBox(
-                width: 30,
-                height: 60,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  ShareBubble(
+                    thread: thread,
+                  ),
+                  UnsubBubble(
+                    size: 26,
+                    threadController: threadController,
+                    thread: thread,
+                  ),
+                ],
               ),
-              InputBubble(
-                userController: userController,
-                threadController: threadController,
-                thread: thread,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  UnsubBubble(
+                    size: 26,
+                    threadController: threadController,
+                    thread: thread,
+                  ),
+                ],
               ),
             ],
           ),
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              UnsubBubble(
-                size: 26,
+              InputBubble(
+                userController: userController,
                 threadController: threadController,
-                thread: thread,
-              ),
-              ShareBubble(
                 thread: thread,
               ),
             ],
