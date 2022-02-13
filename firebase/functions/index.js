@@ -25,7 +25,7 @@ exports.notify = functions.database
       const threadUid = context.params.threadUid;
       const messageUid = context.params.messageUid;
       const snapshot = change.after;
-      const author = snapshot.child("author").val();
+      const author = snapshot.child("authorName").val();
       const text = truncateText(snapshot.child("text").val());
 
       functions.logger.log("Trigger for thread ",
@@ -40,7 +40,7 @@ exports.notify = functions.database
 
       // Send notification payload
       const response = await admin.messaging()
-        .sendToTopic("general", payload);
+        .sendToTopic(threadUid, payload);
       const error = response.error;
       if (error) {
         functions.logger
@@ -51,7 +51,7 @@ exports.notify = functions.database
 
 exports.newUser = functions.firestore.document('users/{userUid}').onCreate((snapshot, context) => {
   // Add welcome threads to new user's thread subscriptions
-  const newSubscriptions = ["welcomeThread1"];
+  const newSubscriptions = ["welcomeThread1", "welcomeThread2"];
   functions.logger.log("Adding welcome package to user ", context.params.userUid);
 
   return snapshot.ref.set({"subscribedThreads": newSubscriptions}, {merge: true});
