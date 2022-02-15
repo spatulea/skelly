@@ -1,4 +1,4 @@
-# skelly
+# skelly strfsh
 
 Tag along as skelly evolves from Flutter's skeleton template to a reactive messaging app.
 
@@ -17,14 +17,15 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
     - Auth for anonymous-only user authentication
     - Use Firestore security rules to manage access control and data validation (no cloud functions)
     - Cloud Messaging to push notifications
-    - Cloud Functions to trigger notifications
+    - Cloud Functions to trigger notifications and help with new user creation
   - Submit (and be accepted by) both app stores
     - Include reporting and blocking/unsubscribe features as required by app stores
   - Last but perhaps most important: **learn**
 
 ## Notes
-  - `lib/firebase_options.dart` is encrypted to protect API keys.
-  - `firebase/firestore.rules` and `database.rules.json` are encrypted. Contact me via email for unencrypted versions.
+  - `lib/firebase_options.dart` and `ios/Runner/GoogleService-Info.plist` are encrypted to protect API keys.
+  - `firebase/firestore.rules` and `database.rules.json` are encrypted to protect respective databases. 
+    - Contact me via email for unencrypted rule files.
 
 ## Firebase
   - Authentication
@@ -51,3 +52,4 @@ Tag along as skelly evolves from Flutter's skeleton template to a reactive messa
           - \<threadUid\>
   - Cloud Functions
     - notify
+    - newUser
