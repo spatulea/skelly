@@ -51,6 +51,7 @@ class UserController with ChangeNotifier {
 
     // Attach a listener to the user's terms agreement state
     _userService.agreedToTerms.listen((newAgreement) {
+      debug('Received new agreeToTerms $newAgreement', origin: origin);
       _agreedToTerms = newAgreement;
       notifyListeners();
     });
