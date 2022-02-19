@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:skelly/src/welcome/welcome_view.dart';
 
 import 'message/thread_controller.dart';
 import 'user/user_controller.dart';
@@ -84,6 +85,10 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute<void>(
                 settings: routeSettings,
                 builder: (BuildContext context) {
+                  // Always return WelcomeView, no matter the route or deep
+                  // link, if the user has not agreed to the terms
+                  if (!userController.agreedToTerms)
+                    return WelcomeView(userController);
                   switch (routeSettings.name) {
                     case SettingsView.routeName:
                       return SettingsView(controller: settingsController);

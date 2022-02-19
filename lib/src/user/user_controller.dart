@@ -9,6 +9,9 @@ class UserController with ChangeNotifier {
   final UserService _userService;
   final AuthService _authService;
 
+  static bool _agreedToTerms = false;
+  bool get agreedToTerms => _agreedToTerms;
+
   static String? _userUid;
   String? get userUid => _userUid;
 
@@ -46,6 +49,12 @@ class UserController with ChangeNotifier {
     // and initialize the UserService
     await _userService.initialize(userUid: _userUid!);
 
+    // Attach a listener to the user's terms agreement state
+    _userService.agreedToTerms.listen((newAgreement) {
+      _agreedToTerms = newAgreement;
+      notifyListeners();
+    });
+
     // Attach a listener to the user's displayName
     _userService.userDisplayName.listen((newName) {
       if (newName != null && newName != _displayName) {
@@ -70,5 +79,9 @@ class UserController with ChangeNotifier {
 
   void unblockUser(String userUid) {
     _userService.removeBlockedUser(userUid);
+  }
+
+  void agreeToTerms() {
+    _userService.agreeToTerms();
   }
 }
