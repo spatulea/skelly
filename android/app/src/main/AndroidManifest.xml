@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.spatulea.skelly">
     <uses-permission android:name="android.permission.INTERNET" />
-   <application
+    <application
         android:label="strfsh"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
@@ -42,4 +42,17 @@
             android:name="flutterEmbedding"
             android:value="2" />
     </application>
+    <queries>
+  <!-- opens https URLs -->
+  <intent>
+    <action android:name="android.intent.action.VIEW" />
+    <data android:scheme="https" />
+  </intent>
+  <!-- opens http URLs -->
+  <intent>
+    <action android:name="android.intent.action.VIEW" />
+    <data android:scheme="http" />
+  </intent>
+
+</queries>
 </manifest>

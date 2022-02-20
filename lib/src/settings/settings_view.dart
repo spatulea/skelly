@@ -113,7 +113,7 @@ class SettingsView extends StatelessWidget {
                             });
                           } else {
                             debug('Could not launch $link',
-                                origin: _className + '.build.Linkify.opOpen');
+                                origin: _className + '.build.Linkify.onOpen');
                           }
                         }),
                   TextSpan(
