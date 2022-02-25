@@ -10,9 +10,9 @@ class RotatingStrfsh extends StatefulWidget {
 class _RotatingStrfshState extends State<RotatingStrfsh>
     with TickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
-    duration: const Duration(minutes: 1),
+    duration: const Duration(seconds: 30),
     vsync: this,
-  )..repeat();
+  )..repeat(reverse: true);
 
   late final Animation<double> _animation = CurvedAnimation(
     parent: _controller,

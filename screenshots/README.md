@@ -1,0 +1,1 @@
+Screenshots and `.mockup` file used with `https://studio.app-mockup.com` to generate app stoee images.
