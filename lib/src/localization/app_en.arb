@@ -3,7 +3,7 @@
   "@appTitle": {
     "description": "The title of the application"
   },
-  "blockDialogTitle": "Block user",
-  "blockDialogBodyPre": "Block messages from ",
+  "blockDialogTitle": "Block & report user",
+  "blockDialogBodyPre": "Block messages from, and report ",
   "blockDialogBodyPost": "This action cannot be undone."
 }
