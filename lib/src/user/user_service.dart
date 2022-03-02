@@ -39,6 +39,7 @@ class UserService {
           'authoredThreads': [],
           'blockedUsers': [],
           'lastUpdateTime': FieldValue.serverTimestamp(),
+          'userCreateTime': FieldValue.serverTimestamp(),
         }).onError((error, stackTrace) => debug(
             'Error $error unable to create user $userUid in users collection. Trace: $stackTrace',
             origin: origin));
@@ -100,6 +101,16 @@ class UserService {
         }
       });
 
+  Stream<bool> get agreedToTerms =>
+      _usersCollection.doc(_thisUserUid).snapshots().map((documentSnapshot) {
+        // agreedToTerms could be missing in the user document
+        try {
+          return (documentSnapshot.get('agreedToTerms') as bool);
+        } catch (e) {
+          return false;
+        }
+      });
+
   Future<void> subscribeToThread(String threadUid) async {
     _usersCollection.doc(_thisUserUid).update({
       'subscribedThreads': FieldValue.arrayUnion([threadUid])
@@ -128,5 +139,9 @@ class UserService {
     _usersCollection.doc(_thisUserUid).update({
       'blockedUsers': FieldValue.arrayRemove([userUid])
     });
+  }
+
+  Future<void> agreeToTerms() async {
+    _usersCollection.doc(_thisUserUid).update({'agreedToTerms': true});
   }
 }

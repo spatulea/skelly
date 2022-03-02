@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:skelly/src/welcome/welcome_view.dart';
 
 import 'message/thread_controller.dart';
 import 'user/user_controller.dart';
@@ -84,16 +85,27 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute<void>(
                 settings: routeSettings,
                 builder: (BuildContext context) {
-                  switch (routeSettings.name) {
-                    case SettingsView.routeName:
-                      return SettingsView(controller: settingsController);
-                    case ThreadListView.routeName:
-                    default:
-                      return ThreadListView(
-                        threadController: threadController,
-                        userController: userController,
-                      );
-                  }
+                  return AnimatedBuilder(
+                      animation: userController,
+                      builder: (context, _) {
+                        // Always route to WelcomeView until user agrees
+                        // to EULA
+                        if (!userController.agreedToTerms) {
+                          return WelcomeView(userController);
+                        }
+                        switch (routeSettings.name) {
+                          case SettingsView.routeName:
+                            return SettingsView(controller: settingsController);
+                          case WelcomeView.routeName:
+                            return WelcomeView(userController);
+                          case ThreadListView.routeName:
+                          default:
+                            return ThreadListView(
+                              threadController: threadController,
+                              userController: userController,
+                            );
+                        }
+                      });
                 },
               );
             },
